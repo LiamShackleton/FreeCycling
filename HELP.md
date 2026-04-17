@@ -1,8 +1,3 @@
-# Read Me First
-The following was discovered as part of building this project:
-
-* The original package name 'freecycling.example.free cycling' is invalid and this project uses 'freecycling.example.free.cycling' instead.
-
 # Getting Started
 
 ### Reference Documentation
@@ -20,9 +15,9 @@ The following guides illustrate how to use some features concretely:
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
 * [Accessing Relational Data using JDBC with Spring](https://spring.io/guides/gs/relational-data-access/)
 * [Managing Transactions](https://spring.io/guides/gs/managing-transactions/)
-* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
 
 ### Maven Parent overrides
 

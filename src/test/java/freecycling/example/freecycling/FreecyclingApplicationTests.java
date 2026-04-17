@@ -1,10 +1,10 @@
-package freecycling.example.free.cycling;
+package freecycling.example.freecycling;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FreeCyclingApplicationTests {
+class FreecyclingApplicationTests {
 
 	@Test
 	void contextLoads() {
