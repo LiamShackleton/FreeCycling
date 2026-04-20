@@ -1,4 +1,4 @@
-package freecycling.example.free.cycling;
+package freecycling.example.freecycling;
 
 public class TransferSite {
     private int idTransferSite;
