@@ -26,7 +26,7 @@ CREATE TABLE `MeetingTimeTable` (
   `idMeetingTimeTable` int NOT NULL AUTO_INCREMENT,
   `MeetingSite` varchar(45) NOT NULL,
   `MeetingTime` varchar(45) NOT NULL,
-  `Availability` varchar(45) NOT NULL,
+  `Availability` varchar(1) NOT NULL,
   PRIMARY KEY (`idMeetingTimeTable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
