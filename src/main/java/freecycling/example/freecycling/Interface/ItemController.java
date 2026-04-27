@@ -1,8 +1,8 @@
 package freecycling.example.freecycling.Interface;
 
-import freecycling.example.freecycling.core.Item;
-import freecycling.example.freecycling.core.ItemDAO;
-import freecycling.example.freecycling.core.User;
+import freecycling.example.freecycling.Core.Item;
+import freecycling.example.freecycling.Core.ItemDAO;
+import freecycling.example.freecycling.Core.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
