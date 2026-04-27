@@ -1,4 +1,4 @@
-package freecycling.example.freecycling.core;
+package freecycling.example.freecycling.Core;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
