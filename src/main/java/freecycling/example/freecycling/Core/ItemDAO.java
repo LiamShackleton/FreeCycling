@@ -1,4 +1,4 @@
-package freecycling.example.freecycling;
+package freecycling.example.freecycling.core;
 
 import java.util.ArrayList;
 import java.util.List;

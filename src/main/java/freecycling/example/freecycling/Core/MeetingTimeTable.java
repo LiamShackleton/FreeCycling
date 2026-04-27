@@ -1,4 +1,4 @@
-package freecycling.example.freecycling;
+package freecycling.example.freecycling.core;
 
 public class MeetingTimeTable {
 
