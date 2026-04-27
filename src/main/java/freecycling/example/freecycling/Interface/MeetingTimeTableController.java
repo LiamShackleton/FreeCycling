@@ -1,5 +1,62 @@
 package freecycling.example.freecycling.Interface;
 
+import freecycling.example.freecycling.Core.MeetingTimeTable;
+import freecycling.example.freecycling.Core.MeetingTimeTableDAO;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/meetings")
+@CrossOrigin(origins = "*")
 public class MeetingTimeTableController {
 
+    private MeetingTimeTableDAO dao;
+
+    public MeetingTimeTableController(MeetingTimeTableDAO dao) {
+        this.dao = dao;
+    }
+
+
+    @PostMapping
+    public ResponseEntity<String> save(@RequestBody MeetingTimeTable meeting) {
+        if (meeting.getMeetingSite().isBlank() || meeting.getMeetingTime().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Meeting site and time cannot be empty");
+        }
+        dao.save(meeting);
+        return ResponseEntity.ok().body("Meeting time saved");
+    }
+
+ 
+    @GetMapping("/{id}")
+    public ResponseEntity<MeetingTimeTable> getMeetingById(@PathVariable int id) {
+        MeetingTimeTable result = dao.findById(id);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<MeetingTimeTable>> getAllMeetings() {
+        List<MeetingTimeTable> results = dao.findAll();
+        return ResponseEntity.ok().body(results);
+    }
+
+
+    @GetMapping("/site/{site}")
+    public ResponseEntity<List<MeetingTimeTable>> getMeetingsBySite(@PathVariable String site) {
+        List<MeetingTimeTable> results = dao.findBySite(site);
+        return ResponseEntity.ok().body(results);
+    }
 }
