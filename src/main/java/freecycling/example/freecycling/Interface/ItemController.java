@@ -1,4 +1,4 @@
-package freecycling.example.freecycling.interfaces;
+package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.core.Item;
 import freecycling.example.freecycling.core.ItemDAO;
