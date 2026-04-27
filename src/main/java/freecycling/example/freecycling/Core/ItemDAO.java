@@ -1,4 +1,4 @@
-package freecycling.example.freecycling;
+package freecycling.example.freecycling.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +13,17 @@ public class ItemDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public String save(Item item) {
+    public int save(Item item) {
         String idSQL = "select uuid()";
-        String key = null;
         try {
-            key = jdbcTemplate.queryForObject(idSQL, String.class);
+            jdbcTemplate.queryForObject(idSQL, String.class);
         } catch (Exception ex) {
-            key = "Error";
+            return 0;
         }
-        if (key.equals("Error"))
-            return key;
 
         String insertSQL = "insert into ItemTable(ItemName, ItemDonor, ItemRecipient, ItemImageURL, ItemAvailability, ItemType, ItemDescription) values (?,?,?,?,?,?,?)";
-        jdbcTemplate.update(insertSQL, item.getItemName(), item.getItemDonor(), item.getItemRecipient(), item.getItemImageUrl(), item.getItemAvailability(), item.getItemType(), item.
-        getItemDescription());
-        return key;
+        jdbcTemplate.update(insertSQL, item.getItemName(), item.getItemDonor(), item.getItemRecipient(), item.getItemImageUrl(), item.getItemAvailability(), item.getItemType(), item.getItemDescription());
+        return 1;
     }
 
     public Item findById(String id) {
