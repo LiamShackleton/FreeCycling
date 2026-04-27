@@ -73,6 +73,18 @@ public class ItemDAO {
         return results;
     }
 
+    public List<Item> findAll() {
+        String sql = "select * from ItemTable";
+        List<Item> results = null;
+        RowMapper<Item> rowMapper = new ItemRowMapper();
+        try {
+            results = jdbcTemplate.query(sql, rowMapper);
+        } catch (Exception ex) {
+            results = new ArrayList<Item>();
+        }
+        return results;
+    }
+
     public void saveRecipient(String itemid, User recipient) {
         String sql = "update ItemTable set ItemRecipient=? where idItemTable=?";
         jdbcTemplate.update(sql, recipient.getUserName(), itemid);

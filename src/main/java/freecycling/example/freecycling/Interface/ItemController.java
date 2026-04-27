@@ -31,4 +31,14 @@ public class ItemController {
         itemDAO.saveRecipient(itemId, recipient);
         return 1;
     }
+
+    @GetMapping("/{id}")
+    public Item getItemById(@PathVariable String id) {
+        return itemDAO.findById(id);
+    }
+
+    @GetMapping
+    public List<Item> getAllItems() {
+        return itemDAO.findAll();
+    }
 }

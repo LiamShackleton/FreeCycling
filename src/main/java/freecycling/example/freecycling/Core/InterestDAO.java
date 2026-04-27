@@ -52,4 +52,16 @@ public class InterestDAO {
         }
         return results;
     }
+
+    public List<Interest> findByItem(String itemId) {
+        String sql = "select * from InterestTable where Item=?";
+        List<Interest> results = null;
+        RowMapper<Interest> rowMapper = new InterestRowMapper();
+        try {
+            results = jdbcTemplate.query(sql, rowMapper, itemId);
+        } catch (Exception ex) {
+            results = new ArrayList<Interest>();
+        }
+        return results;
+    }
 }
