@@ -16,9 +16,9 @@ public class MeetingTimeTableDAO {
     private JdbcTemplate jdbcTemplate;
 
     public void save(MeetingTimeTable meeting) {
-        String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability) VALUES (?,?,?)";
+        String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability, MeetingState) VALUES (?,?,?,?)";
         try {
-            jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability());
+            jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability(), meeting.getMeetingState());
         } catch (Exception ex) {
         }
     }
@@ -56,5 +56,15 @@ public class MeetingTimeTableDAO {
             results = new ArrayList<MeetingTimeTable>();
         }
         return results;
+    }
+
+    public void updateMeetingState(int id, String meetingState) {
+        String sql = "UPDATE MeetingTimeTable SET MeetingState=? WHERE idMeetingTimeTable=?";
+        jdbcTemplate.update(sql, meetingState, id);
+    }
+
+    public void update(MeetingTimeTable meeting) {
+        String sql = "UPDATE MeetingTimeTable SET MeetingSite=?, MeetingTime=?, Availability=?, MeetingState=? WHERE idMeetingTimeTable=?";
+        jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability(), meeting.getMeetingState(), meeting.getIdMeetingTimeTable());
     }
 }

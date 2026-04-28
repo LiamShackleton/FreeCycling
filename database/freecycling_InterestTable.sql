@@ -27,6 +27,7 @@ CREATE TABLE `InterestTable` (
   `User` varchar(45) NOT NULL,
   `Item` varchar(45) NOT NULL,
   `TimeStamp` datetime DEFAULT NULL,
+  `Note` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idInterestTable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

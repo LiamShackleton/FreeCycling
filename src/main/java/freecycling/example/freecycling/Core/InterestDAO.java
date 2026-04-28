@@ -14,8 +14,8 @@ public class InterestDAO {
     private JdbcTemplate jdbcTemplate;
 
     public void save(Interest interest) {
-        String insertSQL = "insert into InterestTable(User, Item, TimeStamp) values (?,?,?)";
-        jdbcTemplate.update(insertSQL, interest.getUser(), interest.getItem(), interest.getTimeStamp());
+        String insertSQL = "insert into InterestTable(User, Item, TimeStamp, Note) values (?,?,?,?)";
+        jdbcTemplate.update(insertSQL, interest.getUser(), interest.getItem(), interest.getTimeStamp(), interest.getNote());
     }
 
     public Interest findById(String id) {
@@ -47,6 +47,18 @@ public class InterestDAO {
         RowMapper<Interest> rowMapper = new InterestRowMapper();
         try {
             results = jdbcTemplate.query(sql, rowMapper);
+        } catch (Exception ex) {
+            results = new ArrayList<Interest>();
+        }
+        return results;
+    }
+
+    public List<Interest> findByItem(String itemId) {
+        String sql = "select * from InterestTable where Item=?";
+        List<Interest> results = null;
+        RowMapper<Interest> rowMapper = new InterestRowMapper();
+        try {
+            results = jdbcTemplate.query(sql, rowMapper, itemId);
         } catch (Exception ex) {
             results = new ArrayList<Interest>();
         }

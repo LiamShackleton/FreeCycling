@@ -1,8 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
-import freecycling.example.freecycling.core.Item;
-import freecycling.example.freecycling.core.ItemDAO;
-import freecycling.example.freecycling.core.User;
+import freecycling.example.freecycling.Core.Item;
+import freecycling.example.freecycling.Core.ItemDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,20 +14,40 @@ public class ItemController {
     @Autowired
     private ItemDAO itemDAO;
 
+    // GET - get all available items
+    // Called with GET /items/getAvailable
     @GetMapping("/getAvailable")
     public List<Item> getAvailableItems() {
         return itemDAO.findAvailable();
     }
 
+    // POST - register a new item
+    // Called with POST /items
     @PostMapping
     public int saveItem(@RequestBody Item item) {
         itemDAO.save(item);
         return 1;
     }
 
-    @PostMapping("/recipient")
-    public int saveRecipient(@RequestParam String itemId, @RequestBody User recipient) {
-        itemDAO.saveRecipient(itemId, recipient);
+    // PATCH - update the recipient for an item
+    // Called with PATCH /items/recipient?itemId=5&recipientId=3
+    @PatchMapping("/recipient")
+    public int saveRecipient(@RequestParam String itemId, @RequestParam String recipientId) {
+        itemDAO.saveRecipient(itemId, recipientId);
         return 1;
+    }
+
+    // GET - find an item by id
+    // Called with GET /items/5
+    @GetMapping("/{id}")
+    public Item getItemById(@PathVariable String id) {
+        return itemDAO.findById(id);
+    }
+
+    // GET - get all items
+    // Called with GET /items
+    @GetMapping
+    public List<Item> getAllItems() {
+        return itemDAO.findAll();
     }
 }

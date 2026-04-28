@@ -13,6 +13,7 @@ public class MeetingTimeTableRowMapper implements RowMapper<MeetingTimeTable> {
         m.setMeetingSite(row.getString("MeetingSite"));
         m.setMeetingTime(row.getString("MeetingTime"));
         m.setAvailability(row.getString("Availability"));
+        m.setMeetingState(row.getString("MeetingState"));
         return m;
     }
 }

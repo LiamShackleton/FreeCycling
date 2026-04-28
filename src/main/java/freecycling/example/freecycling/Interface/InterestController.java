@@ -1,0 +1,79 @@
+package freecycling.example.freecycling.Interface;
+
+import freecycling.example.freecycling.Core.Interest;
+import freecycling.example.freecycling.Core.InterestDAO;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/interests")
+@CrossOrigin(origins = "*")
+public class InterestController {
+
+    private final InterestDAO interestDAO;
+
+    public InterestController(InterestDAO interestDAO) {
+        this.interestDAO = interestDAO;
+    }
+
+    // POST - save a new interest item
+    // Called with POST /interests
+    @PostMapping
+    public ResponseEntity<String> save(@RequestBody Interest interest) {
+        try {
+            interestDAO.save(interest);
+            return ResponseEntity.ok().body("Interest saved successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving interest: " + ex.getMessage());
+        }
+    }
+
+    // GET - find an interest object by id
+    // Called with GET /interests/5
+    @GetMapping("/{id}")
+    public ResponseEntity<Interest> findById(@PathVariable int id) {
+        Interest result = interestDAO.findById(String.valueOf(id));
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    // GET - find interests by user
+    // Called with GET /interests/user/{userId}
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Interest>> findByUser(@PathVariable String userId) {
+        List<Interest> results = interestDAO.findByUser(userId);
+        return ResponseEntity.ok().body(results);
+    }
+
+    // GET - get all interests
+    // Called with GET /interests
+    @GetMapping
+    public ResponseEntity<List<Interest>> findAll() {
+        List<Interest> results = interestDAO.findAll();
+        return ResponseEntity.ok().body(results);
+    }
+
+    // GET - find user ids interested in item by item id
+    // Called with GET /interests/item/{itemId}
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<List<String>> findUserIdsByItem(@PathVariable String itemId) {
+        List<Interest> interests = interestDAO.findByItem(itemId);
+        List<String> userIds = interests.stream()
+                .map(Interest::getUser)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(userIds);
+    }
+}
