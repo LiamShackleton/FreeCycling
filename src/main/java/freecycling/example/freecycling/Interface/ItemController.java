@@ -37,6 +37,14 @@ public class ItemController {
         return 1;
     }
 
+    // PATCH - update the availability for an item
+    // Called with PATCH /items/availability?itemId=5&availability=available
+    @PatchMapping("/availability")
+    public int updateAvailability(@RequestParam String itemId, @RequestParam String availability) {
+        itemDAO.updateAvailability(itemId, availability);
+        return 1;
+    }
+
     // GET - find an item by id
     // Called with GET /items/5
     @GetMapping("/{id}")
