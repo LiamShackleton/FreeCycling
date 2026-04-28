@@ -85,8 +85,8 @@ public class ItemDAO {
         return results;
     }
 
-    public void saveRecipient(String itemid, User recipient) {
+    public void saveRecipient(String itemid, String recipientId) {
         String sql = "update ItemTable set ItemRecipient=? where idItemTable=?";
-        jdbcTemplate.update(sql, recipient.getUserName(), itemid);
+        jdbcTemplate.update(sql, recipientId, itemid);
     }
 }

@@ -7,6 +7,7 @@ public class Interest {
     private String user;
     private String item;
     private Timestamp timeStamp;
+    private String note;
 
     public Interest() {
     }
@@ -41,5 +42,13 @@ public class Interest {
 
     public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

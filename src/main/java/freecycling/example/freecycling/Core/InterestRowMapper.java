@@ -25,6 +25,12 @@ public class InterestRowMapper implements RowMapper<Interest> {
         }
         i.setTimeStamp(timeStamp);
         
+        String note = row.getString("Note");
+        if (row.wasNull()) {
+            note = null;
+        }
+        i.setNote(note);
+        
         return i;
     }
 }

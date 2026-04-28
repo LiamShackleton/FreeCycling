@@ -2,7 +2,6 @@ package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.Item;
 import freecycling.example.freecycling.Core.ItemDAO;
-import freecycling.example.freecycling.Core.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +29,11 @@ public class ItemController {
         return 1;
     }
 
-    // POST - register a recipient for an item
-    // Called with POST /items/recipient?itemId=5
-    @PostMapping("/recipient")
-    public int saveRecipient(@RequestParam String itemId, @RequestBody User recipient) {
-        itemDAO.saveRecipient(itemId, recipient);
+    // PATCH - update the recipient for an item
+    // Called with PATCH /items/recipient?itemId=5&recipientId=3
+    @PatchMapping("/recipient")
+    public int saveRecipient(@RequestParam String itemId, @RequestParam String recipientId) {
+        itemDAO.saveRecipient(itemId, recipientId);
         return 1;
     }
 

@@ -14,8 +14,8 @@ public class InterestDAO {
     private JdbcTemplate jdbcTemplate;
 
     public void save(Interest interest) {
-        String insertSQL = "insert into InterestTable(User, Item, TimeStamp) values (?,?,?)";
-        jdbcTemplate.update(insertSQL, interest.getUser(), interest.getItem(), interest.getTimeStamp());
+        String insertSQL = "insert into InterestTable(User, Item, TimeStamp, Note) values (?,?,?,?)";
+        jdbcTemplate.update(insertSQL, interest.getUser(), interest.getItem(), interest.getTimeStamp(), interest.getNote());
     }
 
     public Interest findById(String id) {

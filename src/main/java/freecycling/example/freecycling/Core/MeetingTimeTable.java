@@ -6,6 +6,7 @@ public class MeetingTimeTable {
     private String MeetingSite;
     private String MeetingTime;
     private String Availability;
+    private String MeetingState;
 
     public MeetingTimeTable() {
 
@@ -41,6 +42,14 @@ public int getIdMeetingTimeTable() {
 
     public void setAvailability(String Availability) {
         this.Availability = Availability;
+    }
+
+    public String getMeetingState() {
+        return MeetingState;
+    }
+
+    public void setMeetingState(String MeetingState) {
+        this.MeetingState = MeetingState;
     }
 
     public void setIdMeetingTimeTable(int int1) {
