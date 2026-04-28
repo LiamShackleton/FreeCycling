@@ -1,2 +1,4 @@
 target/classes/freecycling/example/freecycling/.DS_Store
 /target
+src/main/resources/application.properties
+target/classes/application.properties
