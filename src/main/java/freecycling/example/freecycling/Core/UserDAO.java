@@ -1,5 +1,7 @@
 package freecycling.example.freecycling.Core;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,5 +49,17 @@ public class UserDAO {
         } catch (Exception ex) {
         }
         return result;
+    }
+
+    public List<User> findAll() {
+        String sql = "select * from User_Table";
+        List<User> results = null;
+        RowMapper<User> rowMapper = new UserRowMapper();
+        try {
+            results = jdbcTemplate.query(sql, rowMapper);
+        } catch (Exception ex) {
+            results = new ArrayList<User>();
+        }
+        return results;
     }
 }
