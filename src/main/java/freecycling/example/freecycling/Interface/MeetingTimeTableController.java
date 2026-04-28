@@ -26,7 +26,8 @@ public class MeetingTimeTableController {
         this.dao = dao;
     }
 
-
+    // POST - register a new meeting time
+    // Called with POST /meetings
     @PostMapping
     public ResponseEntity<String> save(@RequestBody MeetingTimeTable meeting) {
         if (meeting.getMeetingSite().isBlank() || meeting.getMeetingTime().isBlank()) {
@@ -36,7 +37,8 @@ public class MeetingTimeTableController {
         return ResponseEntity.ok().body("Meeting time saved");
     }
 
- 
+    // GET - find a meeting time by id
+    // Called with GET /meetings/5
     @GetMapping("/{id}")
     public ResponseEntity<MeetingTimeTable> getMeetingById(@PathVariable int id) {
         MeetingTimeTable result = dao.findById(id);
@@ -46,14 +48,16 @@ public class MeetingTimeTableController {
         return ResponseEntity.ok().body(result);
     }
 
-
+    // GET - get all meeting times
+    // Called with GET /meetings
     @GetMapping
     public ResponseEntity<List<MeetingTimeTable>> getAllMeetings() {
         List<MeetingTimeTable> results = dao.findAll();
         return ResponseEntity.ok().body(results);
     }
 
-
+    // GET - get meeting times by site
+    // Called with GET /meetings/site/SomeSite
     @GetMapping("/site/{site}")
     public ResponseEntity<List<MeetingTimeTable>> getMeetingsBySite(@PathVariable String site) {
         List<MeetingTimeTable> results = dao.findBySite(site);

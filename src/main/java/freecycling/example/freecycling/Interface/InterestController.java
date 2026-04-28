@@ -27,6 +27,8 @@ public class InterestController {
         this.interestDAO = interestDAO;
     }
 
+    // POST - save a new interest item
+    // Called with POST /interests
     @PostMapping
     public ResponseEntity<String> save(@RequestBody Interest interest) {
         try {
@@ -37,6 +39,8 @@ public class InterestController {
         }
     }
 
+    // GET - find an interest object by id
+    // Called with GET /interests/5
     @GetMapping("/{id}")
     public ResponseEntity<Interest> findById(@PathVariable int id) {
         Interest result = interestDAO.findById(String.valueOf(id));
@@ -46,18 +50,24 @@ public class InterestController {
         return ResponseEntity.ok().body(result);
     }
 
+    // GET - find interests by user
+    // Called with GET /interests/user/{userId}
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Interest>> findByUser(@PathVariable String userId) {
         List<Interest> results = interestDAO.findByUser(userId);
         return ResponseEntity.ok().body(results);
     }
 
+    // GET - get all interests
+    // Called with GET /interests
     @GetMapping
     public ResponseEntity<List<Interest>> findAll() {
         List<Interest> results = interestDAO.findAll();
         return ResponseEntity.ok().body(results);
     }
 
+    // GET - find user ids interested in item by item id
+    // Called with GET /interests/item/{itemId}
     @GetMapping("/item/{itemId}")
     public ResponseEntity<List<String>> findUserIdsByItem(@PathVariable String itemId) {
         List<Interest> interests = interestDAO.findByItem(itemId);
