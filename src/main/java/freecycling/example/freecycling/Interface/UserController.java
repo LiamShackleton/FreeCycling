@@ -3,6 +3,8 @@ package freecycling.example.freecycling.Interface;
 import freecycling.example.freecycling.Core.User;
 import freecycling.example.freecycling.Core.UserDAO;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -72,5 +74,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    // GET - get all users
+    // Called with GET /users
+    @GetMapping
+    public List<User> getAllUsers() {
+        return dao.findAll();
     }
 }

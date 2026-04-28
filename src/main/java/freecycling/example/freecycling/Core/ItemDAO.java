@@ -89,4 +89,9 @@ public class ItemDAO {
         String sql = "update ItemTable set ItemRecipient=? where idItemTable=?";
         jdbcTemplate.update(sql, recipientId, itemid);
     }
+
+    public void updateAvailability(String itemid, String availability) {
+        String sql = "update ItemTable set ItemAvailability=? where idItemTable=?";
+        jdbcTemplate.update(sql, availability, itemid);
+    }
 }
