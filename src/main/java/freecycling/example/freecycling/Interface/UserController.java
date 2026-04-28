@@ -28,17 +28,14 @@ public class UserController {
 
     // POST - register a new user
     // Called with POST /users
-    @PostMapping
-    public ResponseEntity<String> save(@RequestBody User user) {
-        if (user.getUserName().isBlank() || user.getPass().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty username or password");
-        }
-        String key = dao.save(user);
-        if (key.equals("Error")) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not save user");
-        }
-        return ResponseEntity.ok().body(key);
+@PostMapping
+public ResponseEntity<String> save(@RequestBody User user) {
+    if (user.getUserName().isBlank() || user.getPass().isBlank()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty username or password");
     }
+    dao.save(user);
+    return ResponseEntity.ok().body("User saved successfully");
+}
 
     // POST - login
     // Called with POST /users/login
