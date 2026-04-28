@@ -13,24 +13,16 @@ public class UserDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public String save(User user) {
-        String idSQL = "select uuid()";
-        String key = null;
+    public void save(User user) {
+        String insertSQL = "INSERT INTO User_Table(UserName, Pass, Email) VALUES (?,?,?)";
         try {
-            key = jdbcTemplate.queryForObject(idSQL, String.class);
+            jdbcTemplate.update(insertSQL, user.getUserName(), user.getPass(), user.getEmail());
         } catch (Exception ex) {
-            key = "Error";
         }
-        if (key.equals("Error"))
-            return key;
-
-        String insertSQL = "insert into User_Table(UserId, UserName, Pass, Email) values (?,?,?,?)";
-        jdbcTemplate.update(insertSQL, key, user.getUserName(), user.getPass(), user.getEmail());
-        return key;
     }
 
     public User findById(int id) {
-        String sql = "select * from User_Table where UserId=?";
+        String sql = "SELECT * FROM User_Table WHERE UserId=?";
         User result = null;
         RowMapper<User> rowMapper = new UserRowMapper();
         try {
@@ -41,7 +33,7 @@ public class UserDAO {
     }
 
     public User findByUserName(String userName) {
-        String sql = "select * from User_Table where UserName=?";
+        String sql = "SELECT * FROM User_Table WHERE UserName=?";
         User result = null;
         RowMapper<User> rowMapper = new UserRowMapper();
         try {
@@ -52,7 +44,7 @@ public class UserDAO {
     }
 
     public List<User> findAll() {
-        String sql = "select * from User_Table";
+        String sql = "SELECT * FROM User_Table";
         List<User> results = null;
         RowMapper<User> rowMapper = new UserRowMapper();
         try {
