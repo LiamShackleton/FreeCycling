@@ -56,4 +56,5 @@ public int getIdMeetingTimeTable() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setIdMeetingTimeTable'");
     }
+    
 }

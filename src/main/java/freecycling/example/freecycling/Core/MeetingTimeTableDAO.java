@@ -17,15 +17,15 @@ public class MeetingTimeTableDAO {
     }
 
     public void save(MeetingTimeTable meeting) {
-        String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability) VALUES (?,?,?)";
-        try {
-            jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability());
-        } catch (Exception ex) {
-        }
+    String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability, MeetingState) VALUES (?,?,?,?)";
+    try {
+        jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability(), meeting.getMeetingState());
+    } catch (Exception ex) {
     }
+}
 
     public MeetingTimeTable findById(int id) {
-        String sql = "SELECT * FROM MeetingTimeTable WHERE idMeetingTime=?";
+        String sql = "SELECT * FROM MeetingTimeTable WHERE idMeetingTimeTable=?";
         MeetingTimeTable result = null;
         RowMapper<MeetingTimeTable> rowMapper = new MeetingTimeTableRowMapper();
         try {
