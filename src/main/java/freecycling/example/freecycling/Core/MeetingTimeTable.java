@@ -16,9 +16,9 @@ public int getIdMeetingTimeTable() {
         return idMeetingTimeTable;
     }
 
-    public void setIdMeetingSite(int idMeetingSite, int idMeetingTimeTable) {
-        this.idMeetingTimeTable = idMeetingTimeTable;
-    }
+    public void setIdMeetingTimeTable(int idMeetingTimeTable) {
+    this.idMeetingTimeTable = idMeetingTimeTable;
+}
 
     public String getMeetingSite() {
         return MeetingSite;
@@ -50,11 +50,6 @@ public int getIdMeetingTimeTable() {
 
     public void setMeetingState(String MeetingState) {
         this.MeetingState = MeetingState;
-    }
-
-    public void setIdMeetingTimeTable(int int1) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setIdMeetingTimeTable'");
     }
     
 }

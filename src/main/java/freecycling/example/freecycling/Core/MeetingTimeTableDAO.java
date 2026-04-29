@@ -70,4 +70,12 @@ public class MeetingTimeTableDAO {
         }
         return results;
     }
+
+    public void updateMeetingState(int id, String meetingState) {
+    String sql = "UPDATE MeetingTimeTable SET MeetingState=? WHERE idMeetingTimeTable=?";
+    try {
+        jdbcTemplate.update(sql, meetingState, id);
+    } catch (Exception ex) {
+    }
+}
 }
