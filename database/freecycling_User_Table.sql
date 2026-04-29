@@ -23,9 +23,9 @@ DROP TABLE IF EXISTS `User_Table`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `User_Table` (
-  `UserId` int NOT NULL AUTO_INCREMENT,
+  `UserId` varchar(45) NOT NULL,
   `UserName` varchar(45) NOT NULL,
-  `Pass` varchar(45) NOT NULL,
+  `Pass` varchar(64) NOT NULL,
   `Email` varchar(45) NOT NULL,
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `UserName_UNIQUE` (`UserName`),

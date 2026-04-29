@@ -26,20 +26,36 @@ public class UserController {
         this.dao = dao;
     }
 
-    // POST - register a new user
-    // Called with POST /users
-@PostMapping
+    
+/*@PostMapping
 public ResponseEntity<String> save(@RequestBody User user) {
     if (user.getUserName().isBlank() || user.getPass().isBlank()) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty username or password");
     }
     dao.save(user);
     return ResponseEntity.ok().body("User saved successfully");
-}
+}*/  
+
+    // POST - register a new user
+    // Called with POST /users
+    @PostMapping
+    public ResponseEntity<String> save(@RequestBody User user) {
+        if (user.getUserName().isBlank() || user.getPass().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty username or password");
+        }
+
+        String key = dao.save(user);
+        if (key.equals("Duplicate")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this name already exists");
+        } else if (key.equals("Error")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can not generate key");
+        }
+        return ResponseEntity.ok().body(key);
+    }
 
     // POST - login
     // Called with POST /users/login
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<String> checkLogin(@RequestBody User user) {
         User result = dao.findByUserName(user.getUserName());
         if (result == null) {
@@ -49,12 +65,21 @@ public ResponseEntity<String> save(@RequestBody User user) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
         return ResponseEntity.ok().body(String.valueOf(result.getUserId()));
+    }*/
+
+        @PostMapping("/login")
+    public ResponseEntity<String> checkLogin(@RequestBody User user) {
+        User result = dao.findByNameAndPassword(user.getUserName(), user.getPass());
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user name or password");
+        }
+        return ResponseEntity.ok().body(String.valueOf(result.getKey()));
     }
 
     // GET - find a user by id
-    // Called with GET /users/5
+    // Called with GET /users/{uuid}
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
         User result = dao.findById(id);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

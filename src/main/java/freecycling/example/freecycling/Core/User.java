@@ -1,7 +1,7 @@
 package freecycling.example.freecycling.Core;
 
 public class User {
-    private int UserId;
+    private String UserId;
     private String UserName;
     private String Pass;
     private String Email;
@@ -9,11 +9,11 @@ public class User {
     public User() {
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return UserId;
     }
 
-    public void setUserId(int UserId) {
+    public void setUserId(String UserId) {
         this.UserId = UserId;
     }
 
@@ -39,5 +39,9 @@ public class User {
 
     public void setEmail(String Email) {
         this.Email = Email;
+    }
+
+    public String getKey() {
+        return UserId;
     }
 }
