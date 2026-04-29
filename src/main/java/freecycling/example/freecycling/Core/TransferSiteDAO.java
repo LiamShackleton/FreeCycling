@@ -3,7 +3,6 @@ package freecycling.example.freecycling.Core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TransferSiteDAO {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public TransferSiteDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public void save(TransferSite site) {
         String insertSQL = "INSERT INTO TransferTable(TransferSiteName, TransferAddress) VALUES (?,?)";
@@ -23,7 +25,7 @@ public class TransferSiteDAO {
     }
 
     public TransferSite findById(int id) {
-        String sql = "SELECT * FROM TransferTable WHERE idTransferSite=?";
+        String sql = "SELECT * FROM TransferTable WHERE idTransferTable=?";
         TransferSite result = null;
         RowMapper<TransferSite> rowMapper = new TransferSiteRowMapper();
         try {

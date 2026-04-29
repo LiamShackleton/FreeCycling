@@ -1,10 +1,8 @@
 package freecycling.example.freecycling.Core;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -12,13 +10,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MeetingTimeTableDAO {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public MeetingTimeTableDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public void save(MeetingTimeTable meeting) {
-        String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability, MeetingState) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO MeetingTimeTable(MeetingSite, MeetingTime, Availability) VALUES (?,?,?)";
         try {
-            jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability(), meeting.getMeetingState());
+            jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability());
         } catch (Exception ex) {
         }
     }
@@ -58,13 +59,15 @@ public class MeetingTimeTableDAO {
         return results;
     }
 
-    public void updateMeetingState(int id, String meetingState) {
-        String sql = "UPDATE MeetingTimeTable SET MeetingState=? WHERE idMeetingTimeTable=?";
-        jdbcTemplate.update(sql, meetingState, id);
-    }
-
-    public void update(MeetingTimeTable meeting) {
-        String sql = "UPDATE MeetingTimeTable SET MeetingSite=?, MeetingTime=?, Availability=?, MeetingState=? WHERE idMeetingTimeTable=?";
-        jdbcTemplate.update(sql, meeting.getMeetingSite(), meeting.getMeetingTime(), meeting.getAvailability(), meeting.getMeetingState(), meeting.getIdMeetingTimeTable());
+    public List<MeetingTimeTable> findByDate(String date) {
+        String sql = "SELECT * FROM MeetingTimeTable WHERE MeetingTime LIKE ?";
+        List<MeetingTimeTable> results = null;
+        RowMapper<MeetingTimeTable> rowMapper = new MeetingTimeTableRowMapper();
+        try {
+            results = jdbcTemplate.query(sql, rowMapper, date + "%");
+        } catch (Exception ex) {
+            results = new ArrayList<MeetingTimeTable>();
+        }
+        return results;
     }
 }

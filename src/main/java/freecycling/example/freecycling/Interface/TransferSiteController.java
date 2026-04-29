@@ -55,4 +55,15 @@ public class TransferSiteController {
         List<TransferSite> results = dao.findAll();
         return ResponseEntity.ok().body(results);
     }
+
+    // GET - find transfer sites by name
+// Called with GET /transfersites/name/Main Library
+@GetMapping("/name/{name}")
+public ResponseEntity<List<TransferSite>> getSiteByName(@PathVariable String name) {
+    List<TransferSite> results = dao.findByName(name);
+    if (results.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    return ResponseEntity.ok().body(results);
+}
 }
