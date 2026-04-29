@@ -4,7 +4,6 @@ public class TransferSite {
     private int idTransferSite;
     private String TransferSiteName;
     private String TransferAddress;
-    private String Address;
 
     public TransferSite() {
     }
@@ -31,13 +30,5 @@ public class TransferSite {
 
     public void setTransferAddress(String TransferAddress) {
         this.TransferAddress = TransferAddress;
-    }
-
-    public String getAddress() {
-        return Address;
-    }
-
-    public void setAddress(String Address) {
-        this.Address = Address;
     }
 }

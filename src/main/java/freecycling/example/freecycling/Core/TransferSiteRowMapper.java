@@ -12,7 +12,6 @@ public class TransferSiteRowMapper implements RowMapper<TransferSite> {
         t.setIdTransferSite(row.getInt("idTransferSite"));
         t.setTransferSiteName(row.getString("TransferSiteName"));
         t.setTransferAddress(row.getString("TransferAddress"));
-        t.setAddress(row.getString("Address"));
         return t;
     }
 }
