@@ -1,7 +1,18 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "User_Table")
 public class User {
-    private String UserId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int UserId;
     private String UserName;
     private String Pass;
     private String Email;
@@ -9,11 +20,11 @@ public class User {
     public User() {
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return UserId;
     }
 
-    public void setUserId(String UserId) {
+    public void setUserId(int UserId) {
         this.UserId = UserId;
     }
 
@@ -39,9 +50,5 @@ public class User {
 
     public void setEmail(String Email) {
         this.Email = Email;
-    }
-
-    public String getKey() {
-        return UserId;
     }
 }
