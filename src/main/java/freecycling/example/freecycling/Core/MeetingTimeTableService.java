@@ -1,19 +1,46 @@
 package freecycling.example.freecycling.Core;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class MeetingTimeTableService implements RowMapper<MeetingTimeTable> {
-    @Override
-    public MeetingTimeTable mapRow(ResultSet row, int rowNum) throws SQLException {
-        MeetingTimeTable m = new MeetingTimeTable();
-        m.setIdMeetingTimeTable(row.getInt("idMeetingTimeTable"));
-        m.setMeetingSite(row.getString("MeetingSite"));
-        m.setMeetingTime(row.getString("MeetingTime"));
-        m.setAvailability(row.getString("Availability"));
-        m.setMeetingState(row.getString("MeetingState"));
-        return m;
+@Service
+public class MeetingTimeTableService {
+
+    @Autowired
+    MeetingTimeTableRepository meetingTimeTableRepository;
+
+    public void save(MeetingTimeTable meeting) {
+        meetingTimeTableRepository.save(meeting);
+    }
+
+    public MeetingTimeTable findById(int id) {
+        Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
+        if (!maybeMeeting.isPresent())
+            return null;
+        return maybeMeeting.get();
+    }
+
+    public List<MeetingTimeTable> findAll() {
+        return meetingTimeTableRepository.findAll();
+    }
+
+    public List<MeetingTimeTable> findBySite(String site) {
+        return meetingTimeTableRepository.findByMeetingSite(site);
+    }
+
+    public List<MeetingTimeTable> findByDate(String date) {
+        return meetingTimeTableRepository.findByMeetingTimeContaining(date);
+    }
+
+    public void updateMeetingState(int id, String meetingState) {
+        Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
+        if (maybeMeeting.isPresent()) {
+            MeetingTimeTable meeting = maybeMeeting.get();
+            meeting.setMeetingState(meetingState);
+            meetingTimeTableRepository.save(meeting);
+        }
     }
 }

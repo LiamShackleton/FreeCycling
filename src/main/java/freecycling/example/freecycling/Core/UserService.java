@@ -1,30 +1,33 @@
 package freecycling.example.freecycling.Core;
 
-import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    private UserRepository repository;
-
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    UserRepository userRepository;
 
     public void save(User user) {
-        repository.save(user);
+        userRepository.save(user);
     }
 
     public User findById(int id) {
-        return repository.findById(id).orElse(null);
+        Optional<User> maybeUser = userRepository.findById(id);
+        if (!maybeUser.isPresent())
+            return null;
+        return maybeUser.get();
     }
 
     public User findByUserName(String userName) {
-        return repository.findByUserName(userName);
+        return userRepository.findByUserName(userName);
     }
 
     public List<User> findAll() {
-        return repository.findAll();
+        return userRepository.findAll();
     }
 }

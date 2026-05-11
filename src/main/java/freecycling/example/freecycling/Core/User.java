@@ -17,8 +17,7 @@ public class User {
     private String Pass;
     private String Email;
 
-    public User() {
-    }
+    public User() {}
 
     public int getUserId() {
         return UserId;
