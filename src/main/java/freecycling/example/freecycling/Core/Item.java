@@ -1,13 +1,35 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ItemTable")
 public class Item {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idItemTable")
     private int itemId;
+    
+    @Column(name = "ItemName", nullable = false, length = 45)
     private String itemName;
+    
+    @Column(name = "ItemDonor", nullable = false, length = 45)
     private String itemDonor;
+    
+    @Column(name = "ItemRecipient", length = 45)
     private String itemRecipient;
+    
+    @Column(name = "ItemImageURL", length = 45)
     private String itemImageUrl;
+    
+    @Column(name = "ItemAvailability", nullable = false, length = 45)
     private String itemAvailability;
+    
+    @Column(name = "ItemType", length = 45)
     private String itemType;
+    
+    @Column(name = "ItemDescription", length = 45)
     private String itemDescription;
 
     public Item() {

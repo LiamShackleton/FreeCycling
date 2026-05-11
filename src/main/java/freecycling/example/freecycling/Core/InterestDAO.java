@@ -1,67 +1,37 @@
 package freecycling.example.freecycling.Core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class InterestDAO {
+    
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private InterestRepository interestRepository;
 
     public void save(Interest interest) {
-        String insertSQL = "insert into InterestTable(User, Item, TimeStamp, Note) values (?,?,?,?)";
-        jdbcTemplate.update(insertSQL, interest.getUser(), interest.getItem(), interest.getTimeStamp(), interest.getNote());
+        interestRepository.save(interest);
     }
 
     public Interest findById(String id) {
-        String sql = "select * from InterestTable where idInterestTable=?";
-        Interest result = null;
-        RowMapper<Interest> rowMapper = new InterestRowMapper();
         try {
-            result = jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return interestRepository.findById(Integer.parseInt(id)).orElse(null);
         } catch (Exception ex) {
+            return null;
         }
-        return result;
     }
 
     public List<Interest> findByUser(String userid) {
-        String sql = "select * from InterestTable where User=?";
-        List<Interest> results = null;
-        RowMapper<Interest> rowMapper = new InterestRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper, userid);
-        } catch (Exception ex) {
-            results = new ArrayList<Interest>();
-        }
-        return results;
+        return interestRepository.findByUser(userid);
     }
 
     public List<Interest> findAll() {
-        String sql = "select * from InterestTable";
-        List<Interest> results = null;
-        RowMapper<Interest> rowMapper = new InterestRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper);
-        } catch (Exception ex) {
-            results = new ArrayList<Interest>();
-        }
-        return results;
+        return interestRepository.findAll();
     }
 
     public List<Interest> findByItem(String itemId) {
-        String sql = "select * from InterestTable where Item=?";
-        List<Interest> results = null;
-        RowMapper<Interest> rowMapper = new InterestRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper, itemId);
-        } catch (Exception ex) {
-            results = new ArrayList<Interest>();
-        }
-        return results;
+        return interestRepository.findByItem(itemId);
     }
 }

@@ -1,97 +1,70 @@
 package freecycling.example.freecycling.Core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class ItemDAO {
+    
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private ItemRepository itemRepository;
 
     public int save(Item item) {
-        String idSQL = "select uuid()";
         try {
-            jdbcTemplate.queryForObject(idSQL, String.class);
+            itemRepository.save(item);
+            return 1;
         } catch (Exception ex) {
             return 0;
         }
-
-        String insertSQL = "insert into ItemTable(ItemName, ItemDonor, ItemRecipient, ItemImageURL, ItemAvailability, ItemType, ItemDescription) values (?,?,?,?,?,?,?)";
-        jdbcTemplate.update(insertSQL, item.getItemName(), item.getItemDonor(), item.getItemRecipient(), item.getItemImageUrl(), item.getItemAvailability(), item.getItemType(), item.getItemDescription());
-        return 1;
     }
 
     public Item findById(String id) {
-        String sql = "select * from ItemTable where idItemTable=?";
-        Item result = null;
-        RowMapper<Item> rowMapper = new ItemRowMapper();
         try {
-            result = jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return itemRepository.findById(Integer.parseInt(id)).orElse(null);
         } catch (Exception ex) {
+            return null;
         }
-        return result;
     }
 
     public List<Item> findByUser(String userid) {
-        String sql = "select * from ItemTable where ItemDonor=?";
-        List<Item> results = null;
-        RowMapper<Item> rowMapper = new ItemRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper, userid);
-        } catch (Exception ex) {
-            results = new ArrayList<Item>();
-        }
-        return results;
+        return itemRepository.findByItemDonor(userid);
     }
 
     public List<Item> findAvailable() {
-        String sql = "select * from ItemTable where ItemAvailability='available'";
-        List<Item> results = null;
-        RowMapper<Item> rowMapper = new ItemRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper);
-        } catch (Exception ex) {
-            results = new ArrayList<Item>();
-        }
-        return results;
+        return itemRepository.findByItemAvailability("available");
     }
 
     public List<Item> findAvailableByType(String type) {
-        String sql = "select * from ItemTable where ItemAvailability='available' and ItemType=?";
-        List<Item> results = null;
-        RowMapper<Item> rowMapper = new ItemRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper, type);
-        } catch (Exception ex) {
-            results = new ArrayList<Item>();
-        }
-        return results;
+        return itemRepository.findByItemAvailabilityAndItemType("available", type);
     }
 
     public List<Item> findAll() {
-        String sql = "select * from ItemTable";
-        List<Item> results = null;
-        RowMapper<Item> rowMapper = new ItemRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper);
-        } catch (Exception ex) {
-            results = new ArrayList<Item>();
-        }
-        return results;
+        return itemRepository.findAll();
     }
 
     public void saveRecipient(String itemid, String recipientId) {
-        String sql = "update ItemTable set ItemRecipient=? where idItemTable=?";
-        jdbcTemplate.update(sql, recipientId, itemid);
+        try {
+            Item item = itemRepository.findById(Integer.parseInt(itemid)).orElse(null);
+            if (item != null) {
+                item.setItemRecipient(recipientId);
+                itemRepository.save(item);
+            }
+        } catch (Exception ex) {
+            // Silently handle exceptions
+        }
     }
 
     public void updateAvailability(String itemid, String availability) {
-        String sql = "update ItemTable set ItemAvailability=? where idItemTable=?";
-        jdbcTemplate.update(sql, availability, itemid);
+        try {
+            Item item = itemRepository.findById(Integer.parseInt(itemid)).orElse(null);
+            if (item != null) {
+                item.setItemAvailability(availability);
+                itemRepository.save(item);
+            }
+        } catch (Exception ex) {
+            // Silently handle exceptions
+        }
     }
 }

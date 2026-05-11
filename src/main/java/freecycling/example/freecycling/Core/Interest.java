@@ -1,12 +1,27 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name = "InterestTable")
 public class Interest {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idInterestTable")
     private int idInterestTable;
+    
+    @Column(name = "User", nullable = false, length = 45)
     private String user;
+    
+    @Column(name = "Item", nullable = false, length = 45)
     private String item;
+    
+    @Column(name = "TimeStamp")
     private Timestamp timeStamp;
+    
+    @Column(name = "Note", length = 45)
     private String note;
 
     public Interest() {
