@@ -1,7 +1,17 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "MeetingTimeTable")
 public class MeetingTimeTable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMeetingTimeTable;
     private String MeetingSite;
     private String MeetingTime;
@@ -9,16 +19,15 @@ public class MeetingTimeTable {
     private String MeetingState;
 
     public MeetingTimeTable() {
+    }
 
-}
-
-public int getIdMeetingTimeTable() {
+    public int getIdMeetingTimeTable() {
         return idMeetingTimeTable;
     }
 
     public void setIdMeetingTimeTable(int idMeetingTimeTable) {
-    this.idMeetingTimeTable = idMeetingTimeTable;
-}
+        this.idMeetingTimeTable = idMeetingTimeTable;
+    }
 
     public String getMeetingSite() {
         return MeetingSite;
@@ -51,5 +60,4 @@ public int getIdMeetingTimeTable() {
     public void setMeetingState(String MeetingState) {
         this.MeetingState = MeetingState;
     }
-    
 }

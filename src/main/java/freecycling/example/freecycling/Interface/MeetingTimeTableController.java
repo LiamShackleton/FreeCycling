@@ -1,7 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.MeetingTimeTable;
-import freecycling.example.freecycling.Core.MeetingTimeTableDAO;
+import freecycling.example.freecycling.Core.MeetingTimeTableRepository;
 
 import java.util.List;
 
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 public class MeetingTimeTableController {
 
-    private MeetingTimeTableDAO dao;
+    private MeetingTimeTableRepository dao;
 
-    public MeetingTimeTableController(MeetingTimeTableDAO dao) {
+    public MeetingTimeTableController(MeetingTimeTableRepository dao) {
         this.dao = dao;
     }
 

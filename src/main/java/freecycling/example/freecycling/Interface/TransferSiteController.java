@@ -1,7 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.TransferSite;
-import freecycling.example.freecycling.Core.TransferSiteDAO;
+import freecycling.example.freecycling.Core.TransferSiteRepository;
 
 import java.util.List;
 
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 public class TransferSiteController {
 
-    private TransferSiteDAO dao;
+    private TransferSiteRepository dao;
 
-    public TransferSiteController(TransferSiteDAO dao) {
+    public TransferSiteController(TransferSiteRepository dao) {
         this.dao = dao;
     }
 

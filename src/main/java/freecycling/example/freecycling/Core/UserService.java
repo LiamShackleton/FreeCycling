@@ -1,18 +1,30 @@
 package freecycling.example.freecycling.Core;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
+@Service
+public class UserService {
 
-public class UserRowMapper implements RowMapper<User> {
-    @Override
-    public User mapRow(ResultSet row, int rowNum) throws SQLException {
-        User u = new User();
-        u.setUserId(row.getString("UserId"));
-        u.setUserName(row.getString("UserName"));
-        u.setPass(row.getString("Pass"));
-        u.setEmail(row.getString("Email"));
-        return u;
+    private UserRepository repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
+
+    public void save(User user) {
+        repository.save(user);
+    }
+
+    public User findById(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public User findByUserName(String userName) {
+        return repository.findByUserName(userName);
+    }
+
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }

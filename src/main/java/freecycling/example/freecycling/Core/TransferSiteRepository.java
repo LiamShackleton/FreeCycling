@@ -1,61 +1,10 @@
 package freecycling.example.freecycling.Core;
 
-import java.util.ArrayList;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-
 @Repository
-public class TransferSiteDAO {
-
-    private JdbcTemplate jdbcTemplate;
-
-    public TransferSiteDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public void save(TransferSite site) {
-        String insertSQL = "INSERT INTO TransferTable(TransferSiteName, TransferAddress) VALUES (?,?)";
-        try {
-            jdbcTemplate.update(insertSQL, site.getTransferSiteName(), site.getTransferAddress());
-        } catch (Exception ex) {
-        }
-    }
-
-    public TransferSite findById(int id) {
-        String sql = "SELECT * FROM TransferTable WHERE idTransferTable=?";
-        TransferSite result = null;
-        RowMapper<TransferSite> rowMapper = new TransferSiteRowMapper();
-        try {
-            result = jdbcTemplate.queryForObject(sql, rowMapper, id);
-        } catch (Exception ex) {
-        }
-        return result;
-    }
-
-    public List<TransferSite> findAll() {
-        String sql = "SELECT * FROM TransferTable";
-        List<TransferSite> results = null;
-        RowMapper<TransferSite> rowMapper = new TransferSiteRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper);
-        } catch (Exception ex) {
-            results = new ArrayList<TransferSite>();
-        }
-        return results;
-    }
-
-    public List<TransferSite> findByName(String name) {
-        String sql = "SELECT * FROM TransferTable WHERE TransferSiteName=?";
-        List<TransferSite> results = null;
-        RowMapper<TransferSite> rowMapper = new TransferSiteRowMapper();
-        try {
-            results = jdbcTemplate.query(sql, rowMapper, name);
-        } catch (Exception ex) {
-            results = new ArrayList<TransferSite>();
-        }
-        return results;
-    }
+public interface TransferSiteRepository extends JpaRepository<TransferSite, Integer> {
+    List<TransferSite> findByTransferSiteName(String TransferSiteName);
 }

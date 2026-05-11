@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class MeetingTimeTableRowMapper implements RowMapper<MeetingTimeTable> {
+public class MeetingTimeTableService implements RowMapper<MeetingTimeTable> {
     @Override
     public MeetingTimeTable mapRow(ResultSet row, int rowNum) throws SQLException {
         MeetingTimeTable m = new MeetingTimeTable();
