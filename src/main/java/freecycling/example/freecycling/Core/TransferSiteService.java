@@ -1,5 +1,6 @@
 package freecycling.example.freecycling.Core;
 
+import freecycling.example.freecycling.Interface.DTOs.TransferSiteDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

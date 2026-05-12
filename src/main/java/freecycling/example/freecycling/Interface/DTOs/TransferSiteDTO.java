@@ -1,4 +1,6 @@
-package freecycling.example.freecycling.Core;
+package freecycling.example.freecycling.Interface.DTOs;
+
+import freecycling.example.freecycling.Core.TransferSite;
 
 public class TransferSiteDTO {
     

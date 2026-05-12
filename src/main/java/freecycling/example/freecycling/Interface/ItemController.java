@@ -1,7 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.Item;
-import freecycling.example.freecycling.Core.ItemDTO;
+import freecycling.example.freecycling.Interface.DTOs.ItemDTO;
 import freecycling.example.freecycling.Core.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.TransferSite;
-import freecycling.example.freecycling.Core.TransferSiteDTO;
+import freecycling.example.freecycling.Interface.DTOs.TransferSiteDTO;
 import freecycling.example.freecycling.Core.TransferSiteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
