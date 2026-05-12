@@ -1,6 +1,7 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.TransferSite;
+import freecycling.example.freecycling.Core.TransferSiteDTO;
 import freecycling.example.freecycling.Core.TransferSiteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,41 +29,49 @@ public class TransferSiteController {
     // POST - register a new transfer site
     // Called with POST /transfersites
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody TransferSite site) {
-        if (site.getTransferSiteName().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transfer site name cannot be empty");
+    public ResponseEntity<String> save(@RequestBody TransferSiteDTO siteDto) {
+        String key = service.save(siteDto);
+        if (key.equals("Bad Id")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad Transfer Site Data");
         }
-        service.save(site);
-        return ResponseEntity.ok().body("Transfer site saved");
+        return ResponseEntity.ok().body(key);
     }
 
     // GET - find a transfer site by id
     // Called with GET /transfersites/5
     @GetMapping("/{id}")
-    public ResponseEntity<TransferSite> getSiteById(@PathVariable int id) {
+    public ResponseEntity<TransferSiteDTO> getSiteById(@PathVariable int id) {
         TransferSite result = service.findById(id);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(new TransferSiteDTO(result));
     }
 
     // GET - get all transfer sites
     // Called with GET /transfersites
     @GetMapping
-    public ResponseEntity<List<TransferSite>> getAllSites() {
-        List<TransferSite> results = service.findAll();
+    public ResponseEntity<List<TransferSiteDTO>> getAllSites() {
+        List<TransferSite> sites = service.findAll();
+        List<TransferSiteDTO> results = new ArrayList<>();
+        for (TransferSite site : sites) {
+            results.add(new TransferSiteDTO(site));
+        }
         return ResponseEntity.ok().body(results);
     }
 
     // GET - find transfer sites by name
     // Called with GET /transfersites/name/Main Library
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<TransferSite>> getSiteByName(@PathVariable String name) {
+    public ResponseEntity<List<TransferSiteDTO>> getSiteByName(@PathVariable String name) {
         List<TransferSite> results = service.findByName(name);
         if (results.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(results);
+        List<TransferSiteDTO> dtoResults = new ArrayList<>();
+        for (TransferSite site : results) {
+            dtoResults.add(new TransferSiteDTO(site));
+        }
+        return ResponseEntity.ok().body(dtoResults);
     }
 }

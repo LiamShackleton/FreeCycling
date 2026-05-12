@@ -1,5 +1,6 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +14,12 @@ public class TransferSite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idTransferSite;
-    private String TransferSiteName;
-    private String TransferAddress;
+    
+    @Column(name = "TransferSiteName")
+    private String transferSiteName;
+    
+    @Column(name = "TransferAddress")
+    private String transferAddress;
 
     public TransferSite() {
     }
@@ -28,18 +33,18 @@ public class TransferSite {
     }
 
     public String getTransferSiteName() {
-        return TransferSiteName;
+        return transferSiteName;
     }
 
-    public void setTransferSiteName(String TransferSiteName) {
-        this.TransferSiteName = TransferSiteName;
+    public void setTransferSiteName(String transferSiteName) {
+        this.transferSiteName = transferSiteName;
     }
 
     public String getTransferAddress() {
-        return TransferAddress;
+        return transferAddress;
     }
 
-    public void setTransferAddress(String TransferAddress) {
-        this.TransferAddress = TransferAddress;
+    public void setTransferAddress(String transferAddress) {
+        this.transferAddress = transferAddress;
     }
 }

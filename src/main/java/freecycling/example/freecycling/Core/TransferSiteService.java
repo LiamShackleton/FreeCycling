@@ -12,8 +12,13 @@ public class TransferSiteService {
         this.repository = repository;
     }
 
-    public void save(TransferSite site) {
+    public String save(TransferSiteDTO siteDto) {
+        TransferSite site = new TransferSite();
+        site.setTransferSiteName(siteDto.getTransferSiteName());
+        site.setTransferAddress(siteDto.getTransferAddress());
+        
         repository.save(site);
+        return String.valueOf(site.getIdTransferSite());
     }
 
     public TransferSite findById(int id) {

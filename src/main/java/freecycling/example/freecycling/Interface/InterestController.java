@@ -1,9 +1,8 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.Interest;
-import freecycling.example.freecycling.Core.InterestDAO;
 import freecycling.example.freecycling.Core.InterestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import freecycling.example.freecycling.Core.InterestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +15,17 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class InterestController {
 
-    @Autowired
-    private InterestDAO interestDAO;
+    private final InterestService interestService;
+
+    public InterestController(InterestService interestService) {
+        this.interestService = interestService;
+    }
 
     // POST - save a new interest item
     // Called with POST /interests
     @PostMapping
     public ResponseEntity<String> save(@RequestBody InterestDTO interest) {
-        String result = interestDAO.save(interest);
+        String result = interestService.save(interest);
         if ("Bad Id".equals(result)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user or item ID");
         }
@@ -34,7 +36,7 @@ public class InterestController {
     // Called with GET /interests/5
     @GetMapping("/{id}")
     public ResponseEntity<InterestDTO> findById(@PathVariable int id) {
-        Interest result = interestDAO.findById(String.valueOf(id));
+        Interest result = interestService.findById(String.valueOf(id));
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -45,7 +47,7 @@ public class InterestController {
     // Called with GET /interests/user/{userId}
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<InterestDTO>> findByUser(@PathVariable String userId) {
-        List<Interest> results = interestDAO.findByUser(userId);
+        List<Interest> results = interestService.findByUser(userId);
         return ResponseEntity.ok().body(results.stream()
                 .map(InterestDTO::new)
                 .collect(Collectors.toList()));
@@ -55,7 +57,7 @@ public class InterestController {
     // Called with GET /interests
     @GetMapping
     public ResponseEntity<List<InterestDTO>> findAll() {
-        List<Interest> results = interestDAO.findAll();
+        List<Interest> results = interestService.findAll();
         return ResponseEntity.ok().body(results.stream()
                 .map(InterestDTO::new)
                 .collect(Collectors.toList()));
@@ -65,7 +67,7 @@ public class InterestController {
     // Called with GET /interests/item/{itemId}
     @GetMapping("/item/{itemId}")
     public ResponseEntity<List<String>> findUserIdsByItem(@PathVariable String itemId) {
-        List<Interest> interests = interestDAO.findByItem(itemId);
+        List<Interest> interests = interestService.findByItem(itemId);
         return ResponseEntity.ok().body(interests.stream()
                 .map(Interest::getUser)
                 .collect(Collectors.toList()));

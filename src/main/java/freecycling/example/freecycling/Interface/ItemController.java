@@ -1,9 +1,8 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.Item;
-import freecycling.example.freecycling.Core.ItemDAO;
 import freecycling.example.freecycling.Core.ItemDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import freecycling.example.freecycling.Core.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +14,17 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
 
-    @Autowired
-    private ItemDAO itemDAO;
+    private final ItemService itemService;
+
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     // GET - find all available items with full details
     // Called with GET /items/getAvailable
     @GetMapping("/getAvailable")
     public ResponseEntity<List<ItemDTO>> findAvailableItems() {
-        List<Item> items = itemDAO.findAvailable();
+        List<Item> items = itemService.findAvailable();
         List<ItemDTO> results = new ArrayList<ItemDTO>();
         for(Item i : items) {
             results.add(new ItemDTO(i));
@@ -34,7 +36,7 @@ public class ItemController {
     // Called with POST /items
     @PostMapping
     public ResponseEntity<String> saveItem(@RequestBody ItemDTO item) {
-        String result = itemDAO.save(item);
+        String result = itemService.save(item);
         if ("Bad Id".equals(result)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid itemDonor");
         }
@@ -46,7 +48,7 @@ public class ItemController {
     @PatchMapping("/recipient")
     public ResponseEntity<String> saveRecipient(@RequestParam String itemId, @RequestParam String recipientId) {
         try {
-            itemDAO.saveRecipient(itemId, recipientId);
+            itemService.saveRecipient(itemId, recipientId);
             return ResponseEntity.ok().body("Recipient updated successfully");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating recipient: " + ex.getMessage());
@@ -58,7 +60,7 @@ public class ItemController {
     @PatchMapping("/availability")
     public ResponseEntity<String> updateAvailability(@RequestParam String itemId, @RequestParam String availability) {
         try {
-            itemDAO.updateAvailability(itemId, availability);
+            itemService.updateAvailability(itemId, availability);
             return ResponseEntity.ok().body("Availability updated successfully");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating availability: " + ex.getMessage());
@@ -69,7 +71,7 @@ public class ItemController {
     // Called with GET /items/5
     @GetMapping("/{id}")
     public ResponseEntity<ItemDTO> findById(@PathVariable String id) {
-        Item item = itemDAO.findById(id);
+        Item item = itemService.findById(id);
         if (item == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -80,7 +82,7 @@ public class ItemController {
     // Called with GET /items
     @GetMapping
     public ResponseEntity<List<ItemDTO>> getAllItems() {
-        List<Item> items = itemDAO.findAll();
+        List<Item> items = itemService.findAll();
         List<ItemDTO> results = new ArrayList<ItemDTO>();
         for(Item i : items) {
             results.add(new ItemDTO(i));
