@@ -1,5 +1,6 @@
 package freecycling.example.freecycling.Core;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,9 +13,16 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "UserId")
     private int userId;
+
+    @Column(name = "UserName")
     private String userName;
+
+    @Column(name = "Pass")
     private String pass;
+
+    @Column(name = "Email")
     private String email;
 
     public User() {}

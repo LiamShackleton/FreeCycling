@@ -13,6 +13,9 @@ public class MeetingTimeTableService {
     MeetingTimeTableRepository meetingTimeTableRepository;
 
     public void save(MeetingTimeTable meeting) {
+        // Set default values when creating a new meeting slot
+        meeting.setAvailability("Available");
+        meeting.setMeetingState(null);
         meetingTimeTableRepository.save(meeting);
     }
 
@@ -35,11 +38,32 @@ public class MeetingTimeTableService {
         return meetingTimeTableRepository.findByMeetingTimeContaining(date);
     }
 
+    public List<MeetingTimeTable> findAvailableTimes(String site, String date) {
+        return meetingTimeTableRepository
+            .findByMeetingSiteAndMeetingTimeContainingAndAvailability(site, date, "Available");
+    }
+
+    // Books a meeting slot - sets availability to Unavailable and state to Pending
+    public void bookMeeting(int id, int itemId) {
+        Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
+        if (maybeMeeting.isPresent()) {
+            MeetingTimeTable meeting = maybeMeeting.get();
+            meeting.setAvailability("Unavailable");
+            meeting.setMeetingState("Pending");
+            meeting.setItemId(itemId);
+            meetingTimeTableRepository.save(meeting);
+        }
+    }
+
+    // Updates meeting state and marks as completed if state is Completed
     public void updateMeetingState(int id, String meetingState) {
         Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
         if (maybeMeeting.isPresent()) {
             MeetingTimeTable meeting = maybeMeeting.get();
             meeting.setMeetingState(meetingState);
+            if (meetingState.equals("Completed")) {
+                meeting.setAvailability("Unavailable");
+            }
             meetingTimeTableRepository.save(meeting);
         }
     }

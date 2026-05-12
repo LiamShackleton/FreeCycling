@@ -2,6 +2,7 @@ package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.User;
 import freecycling.example.freecycling.Core.UserService;
+import freecycling.example.freecycling.Interface.DTOs.LoginDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,15 +36,15 @@ public class UserController {
         return ResponseEntity.ok().body("User saved successfully");
     }
 
-    // POST - login
+    // POST - login using LoginDTO
     // Called with POST /users/login
     @PostMapping("/login")
-    public ResponseEntity<String> checkLogin(@RequestBody User user) {
-        User result = service.findByUserName(user.getUserName());
+    public ResponseEntity<String> checkLogin(@RequestBody LoginDTO login) {
+        User result = service.findByUserName(login.getUserName());
         if (result == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        if (!result.getPass().equals(user.getPass())) {
+        if (!result.getPass().equals(login.getPass())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
         return ResponseEntity.ok().body(String.valueOf(result.getUserId()));

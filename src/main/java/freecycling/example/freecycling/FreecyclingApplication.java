@@ -8,6 +8,5 @@ public class FreecyclingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FreecyclingApplication.class, args);
-	}
+	}}
 
-}

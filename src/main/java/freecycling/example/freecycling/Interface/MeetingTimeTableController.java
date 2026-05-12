@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -71,14 +72,43 @@ public class MeetingTimeTableController {
         return ResponseEntity.ok().body(results);
     }
 
+    // GET - find available meeting times by site and date
+    // Called with GET /meetings/available?site=Main Library&date=2026-05-01
+    @GetMapping("/available")
+    public ResponseEntity<List<MeetingTimeTable>> getAvailableTimes(
+            @RequestParam String site,
+            @RequestParam String date) {
+        List<MeetingTimeTable> results = service.findAvailableTimes(site, date);
+        return ResponseEntity.ok().body(results);
+    }
+
     // PATCH - update meeting state by id
     // Called with PATCH /meetings/state/5
     @PatchMapping("/state/{id}")
-    public ResponseEntity<String> updateMeetingState(@PathVariable int id, @RequestBody String meetingState) {
+    public ResponseEntity<String> updateMeetingState(
+            @PathVariable int id,
+            @RequestBody String meetingState) {
         if (meetingState == null || meetingState.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Meeting state cannot be empty");
         }
         service.updateMeetingState(id, meetingState);
         return ResponseEntity.ok().body("Meeting state updated");
     }
+
+    // POST - book a meeting slot
+// Called with POST /meetings/book/2?itemId=1
+@PostMapping("/book/{id}")
+public ResponseEntity<String> bookMeeting(
+        @PathVariable int id,
+        @RequestParam int itemId) {
+    MeetingTimeTable result = service.findById(id);
+    if (result == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Meeting not found");
+    }
+    if (result.getAvailability().equals("Unavailable")) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Meeting slot is already booked");
+    }
+    service.bookMeeting(id, itemId);
+    return ResponseEntity.ok().body("Meeting booked successfully");
+}
 }
