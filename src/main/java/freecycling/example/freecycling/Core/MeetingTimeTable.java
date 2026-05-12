@@ -13,13 +13,13 @@ public class MeetingTimeTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMeetingTimeTable;
-    private String MeetingSite;
-    private String MeetingTime;
-    private String Availability;
-    private String MeetingState;
+    private String meetingSite;
+    private String meetingTime;
+    private String availability;
+    private String meetingState;
+    private int itemId;
 
-    public MeetingTimeTable() {
-    }
+    public MeetingTimeTable() {}
 
     public int getIdMeetingTimeTable() {
         return idMeetingTimeTable;
@@ -30,34 +30,42 @@ public class MeetingTimeTable {
     }
 
     public String getMeetingSite() {
-        return MeetingSite;
+        return meetingSite;
     }
 
-    public void setMeetingSite(String MeetingSite) {
-        this.MeetingSite = MeetingSite;
+    public void setMeetingSite(String meetingSite) {
+        this.meetingSite = meetingSite;
     }
 
     public String getMeetingTime() {
-        return MeetingTime;
+        return meetingTime;
     }
 
-    public void setMeetingTime(String MeetingTime) {
-        this.MeetingTime = MeetingTime;
+    public void setMeetingTime(String meetingTime) {
+        this.meetingTime = meetingTime;
     }
 
     public String getAvailability() {
-        return Availability;
+        return availability;
     }
 
-    public void setAvailability(String Availability) {
-        this.Availability = Availability;
+    public void setAvailability(String availability) {
+        this.availability = availability;
     }
 
     public String getMeetingState() {
-        return MeetingState;
+        return meetingState;
     }
 
-    public void setMeetingState(String MeetingState) {
-        this.MeetingState = MeetingState;
+    public void setMeetingState(String meetingState) {
+        this.meetingState = meetingState;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 }
