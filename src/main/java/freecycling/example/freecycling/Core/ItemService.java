@@ -12,7 +12,7 @@ public class ItemService {
         this.itemDAO = itemDAO;
     }
 
-    public int save(Item item) {
+    public String save(ItemDTO item) {
         return itemDAO.save(item);
     }
 
