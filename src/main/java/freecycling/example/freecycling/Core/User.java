@@ -12,42 +12,42 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int UserId;
-    private String UserName;
-    private String Pass;
-    private String Email;
+    private int userId;
+    private String userName;
+    private String pass;
+    private String email;
 
     public User() {}
 
     public int getUserId() {
-        return UserId;
+        return userId;
     }
 
-    public void setUserId(int UserId) {
-        this.UserId = UserId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPass() {
-        return Pass;
+        return pass;
     }
 
-    public void setPass(String Pass) {
-        this.Pass = Pass;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
