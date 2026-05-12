@@ -1,18 +1,12 @@
 package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.Interest;
+import freecycling.example.freecycling.Core.InterestDAO;
 import freecycling.example.freecycling.Core.InterestDTO;
-import freecycling.example.freecycling.Core.InterestService;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,29 +16,25 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class InterestController {
 
-    private final InterestService interestService;
-
-    public InterestController(InterestService interestService) {
-        this.interestService = interestService;
-    }
+    @Autowired
+    private InterestDAO interestDAO;
 
     // POST - save a new interest item
     // Called with POST /interests
     @PostMapping
     public ResponseEntity<String> save(@RequestBody InterestDTO interest) {
-        try {
-            interestService.save(interest);
-            return ResponseEntity.ok().body("Interest saved successfully");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving interest: " + ex.getMessage());
+        String result = interestDAO.save(interest);
+        if ("Bad Id".equals(result)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user or item ID");
         }
+        return ResponseEntity.ok().body("Interest saved successfully");
     }
 
     // GET - find an interest object by id
     // Called with GET /interests/5
     @GetMapping("/{id}")
     public ResponseEntity<InterestDTO> findById(@PathVariable int id) {
-        Interest result = interestService.findById(String.valueOf(id));
+        Interest result = interestDAO.findById(String.valueOf(id));
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -55,7 +45,7 @@ public class InterestController {
     // Called with GET /interests/user/{userId}
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<InterestDTO>> findByUser(@PathVariable String userId) {
-        List<Interest> results = interestService.findByUser(userId);
+        List<Interest> results = interestDAO.findByUser(userId);
         return ResponseEntity.ok().body(results.stream()
                 .map(InterestDTO::new)
                 .collect(Collectors.toList()));
@@ -65,7 +55,7 @@ public class InterestController {
     // Called with GET /interests
     @GetMapping
     public ResponseEntity<List<InterestDTO>> findAll() {
-        List<Interest> results = interestService.findAll();
+        List<Interest> results = interestDAO.findAll();
         return ResponseEntity.ok().body(results.stream()
                 .map(InterestDTO::new)
                 .collect(Collectors.toList()));
@@ -75,7 +65,7 @@ public class InterestController {
     // Called with GET /interests/item/{itemId}
     @GetMapping("/item/{itemId}")
     public ResponseEntity<List<String>> findUserIdsByItem(@PathVariable String itemId) {
-        List<Interest> interests = interestService.findByItem(itemId);
+        List<Interest> interests = interestDAO.findByItem(itemId);
         return ResponseEntity.ok().body(interests.stream()
                 .map(Interest::getUser)
                 .collect(Collectors.toList()));
