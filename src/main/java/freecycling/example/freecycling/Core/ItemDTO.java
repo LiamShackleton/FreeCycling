@@ -21,6 +21,17 @@ public class ItemDTO {
     public ItemDTO() {
     }
 
+    public ItemDTO(Item item) {
+        this.itemId = item.getItemId();
+        this.itemName = item.getItemName();
+        this.itemDonor = item.getItemDonor();
+        this.itemRecipient = item.getItemRecipient();
+        this.itemImageUrl = item.getItemImageUrl();
+        this.itemAvailability = item.getItemAvailability();
+        this.itemType = item.getItemType();
+        this.itemDescription = item.getItemDescription();
+    }
+
     public int getItemId() {
         return itemId;
     }

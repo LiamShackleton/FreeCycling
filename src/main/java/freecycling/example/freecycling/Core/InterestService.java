@@ -12,8 +12,8 @@ public class InterestService {
         this.interestDAO = interestDAO;
     }
 
-    public void save(Interest interest) {
-        interestDAO.save(interest);
+    public String save(InterestDTO interest) {
+        return interestDAO.save(interest);
     }
 
     public Interest findById(String id) {

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,13 +18,15 @@ public class ItemController {
     @Autowired
     private ItemDAO itemDAO;
 
-    // GET - get all available items
+    // GET - find all available items with full details
     // Called with GET /items/getAvailable
     @GetMapping("/getAvailable")
-    public ResponseEntity<List<Integer>> getAvailableItems() {
-        List<Integer> results = itemDAO.findAvailable().stream()
-                .map(Item::getItemId)
-                .collect(java.util.stream.Collectors.toList());
+    public ResponseEntity<List<ItemDTO>> findAvailableItems() {
+        List<Item> items = itemDAO.findAvailable();
+        List<ItemDTO> results = new ArrayList<ItemDTO>();
+        for(Item i : items) {
+            results.add(new ItemDTO(i));
+        }
         return ResponseEntity.ok().body(results);
     }
 
@@ -65,12 +68,12 @@ public class ItemController {
     // GET - find an item by id
     // Called with GET /items/5
     @GetMapping("/{id}")
-    public ResponseEntity<Integer> getItemById(@PathVariable String id) {
+    public ResponseEntity<ItemDTO> findById(@PathVariable String id) {
         Item item = itemDAO.findById(id);
         if (item == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(item.getItemId());
+        return ResponseEntity.ok().body(new ItemDTO(item));
     }
 
     // GET - get all items
@@ -78,20 +81,10 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<List<ItemDTO>> getAllItems() {
         List<Item> items = itemDAO.findAll();
-        List<ItemDTO> dtos = items.stream()
-                .map(item -> {
-                    ItemDTO dto = new ItemDTO();
-                    dto.setItemId(item.getItemId());
-                    dto.setItemName(item.getItemName());
-                    dto.setItemDonor(item.getItemDonor());
-                    dto.setItemRecipient(item.getItemRecipient());
-                    dto.setItemImageUrl(item.getItemImageUrl());
-                    dto.setItemAvailability(item.getItemAvailability());
-                    dto.setItemType(item.getItemType());
-                    dto.setItemDescription(item.getItemDescription());
-                    return dto;
-                })
-                .collect(java.util.stream.Collectors.toList());
-        return ResponseEntity.ok().body(dtos);
+        List<ItemDTO> results = new ArrayList<ItemDTO>();
+        for(Item i : items) {
+            results.add(new ItemDTO(i));
+        }
+        return ResponseEntity.ok().body(results);
     }
 }
