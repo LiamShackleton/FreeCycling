@@ -39,16 +39,16 @@ public class UserController {
     // POST - login using LoginDTO
     // Called with POST /users/login
     @PostMapping("/login")
-    public ResponseEntity<String> checkLogin(@RequestBody LoginDTO login) {
-        User result = service.findByUserName(login.getUserName());
-        if (result == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
-        if (!result.getPass().equals(login.getPass())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
-        return ResponseEntity.ok().body(String.valueOf(result.getUserId()));
+public ResponseEntity<String> checkLogin(@RequestBody LoginDTO login) {
+    User result = service.findByUserName(login.getUserName());
+    if (result == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     }
+    if (!service.verifyPassword(login.getPass(), result.getPass())) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    }
+    return ResponseEntity.ok().body(String.valueOf(result.getUserId()));
+}
 
     // GET - find a user by id
     // Called with GET /users/5
