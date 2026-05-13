@@ -57,13 +57,15 @@ public class MeetingTimeTableService {
     }
 
     public void updateMeetingState(int id, String meetingState) {
+        // Remove any extra quotes from the incoming value
+        meetingState = meetingState.replace("\"", "").trim();
+
         Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
         if (maybeMeeting.isPresent()) {
             MeetingTimeTable meeting = maybeMeeting.get();
             meeting.setMeetingState(meetingState);
             if (meetingState.equals("Completed")) {
                 meeting.setAvailability("Unavailable");
-                // Update the item availability to "Given Away"
                 if (meeting.getItemId() != null) {
                     itemService.updateAvailability(
                         String.valueOf(meeting.getItemId()), "Given Away");
