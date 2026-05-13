@@ -31,12 +31,11 @@ public class MeetingTimeTableController {
     // POST - save a new meeting time
     // Called with POST /meetings
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody MeetingTimeDTO meeting) {
-        if (meeting.getMeetingSite().isBlank() || meeting.getMeetingTime().isBlank()) {
+    public ResponseEntity<String> save(@RequestBody MeetingTimeDTO meetingDTO) {
+        if (meetingDTO.getMeetingSite().isBlank() || meetingDTO.getMeetingTime().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Meeting site and time cannot be empty");
         }
-        
-        service.save(meeting);
+        service.save(meetingDTO);
         return ResponseEntity.ok().body("Meeting time saved");
     }
 
@@ -55,30 +54,33 @@ public class MeetingTimeTableController {
     // Called with GET /meetings
     @GetMapping
     public ResponseEntity<List<MeetingTimeDTO>> getAllMeetings() {
-        List<MeetingTimeTable> results = service.findAll();
-        return ResponseEntity.ok().body(results.stream()
+        List<MeetingTimeDTO> results = service.findAll()
+            .stream()
             .map(MeetingTimeDTO::new)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
+        return ResponseEntity.ok().body(results);
     }
 
     // GET - find meetings by site
     // Called with GET /meetings/site/Main Library
     @GetMapping("/site/{site}")
     public ResponseEntity<List<MeetingTimeDTO>> getMeetingsBySite(@PathVariable String site) {
-        List<MeetingTimeTable> results = service.findBySite(site);
-        return ResponseEntity.ok().body(results.stream()
+        List<MeetingTimeDTO> results = service.findBySite(site)
+            .stream()
             .map(MeetingTimeDTO::new)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
+        return ResponseEntity.ok().body(results);
     }
 
     // GET - find meetings by date
     // Called with GET /meetings/date/2026-05-01
     @GetMapping("/date/{date}")
     public ResponseEntity<List<MeetingTimeDTO>> getMeetingsByDate(@PathVariable String date) {
-        List<MeetingTimeTable> results = service.findByDate(date);
-        return ResponseEntity.ok().body(results.stream()
+        List<MeetingTimeDTO> results = service.findByDate(date)
+            .stream()
             .map(MeetingTimeDTO::new)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
+        return ResponseEntity.ok().body(results);
     }
 
     // GET - find available meeting times by site and date
@@ -87,10 +89,28 @@ public class MeetingTimeTableController {
     public ResponseEntity<List<MeetingTimeDTO>> getAvailableTimes(
             @RequestParam String site,
             @RequestParam String date) {
-        List<MeetingTimeTable> results = service.findAvailableTimes(site, date);
-        return ResponseEntity.ok().body(results.stream()
+        List<MeetingTimeDTO> results = service.findAvailableTimes(site, date)
+            .stream()
             .map(MeetingTimeDTO::new)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
+        return ResponseEntity.ok().body(results);
+    }
+
+    // POST - book a meeting slot
+    // Called with POST /meetings/book/2?itemId=1
+    @PostMapping("/book/{id}")
+    public ResponseEntity<String> bookMeeting(
+            @PathVariable int id,
+            @RequestParam int itemId) {
+        MeetingTimeTable result = service.findById(id);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Meeting not found");
+        }
+        if (result.getAvailability().equals("Unavailable")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Meeting slot is already booked");
+        }
+        service.bookMeeting(id, itemId);
+        return ResponseEntity.ok().body("Meeting booked successfully");
     }
 
     // PATCH - update meeting state by id
@@ -105,21 +125,4 @@ public class MeetingTimeTableController {
         service.updateMeetingState(id, meetingState);
         return ResponseEntity.ok().body("Meeting state updated");
     }
-
-    // POST - book a meeting slot
-// Called with POST /meetings/book/2?itemId=1
-@PostMapping("/book/{id}")
-public ResponseEntity<String> bookMeeting(
-        @PathVariable int id,
-        @RequestParam int itemId) {
-    MeetingTimeTable result = service.findById(id);
-    if (result == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Meeting not found");
-    }
-    if (result.getAvailability().equals("Unavailable")) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Meeting slot is already booked");
-    }
-    service.bookMeeting(id, itemId);
-    return ResponseEntity.ok().body("Meeting booked successfully");
-}
 }
