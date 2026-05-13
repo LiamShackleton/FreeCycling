@@ -12,8 +12,10 @@ public class MeetingTimeTableService {
     @Autowired
     MeetingTimeTableRepository meetingTimeTableRepository;
 
+    @Autowired
+    ItemService itemService;
+
     public void save(MeetingTimeTable meeting) {
-        // Set default values when creating a new meeting slot
         meeting.setAvailability("Available");
         meeting.setMeetingState(null);
         meetingTimeTableRepository.save(meeting);
@@ -43,7 +45,6 @@ public class MeetingTimeTableService {
             .findByMeetingSiteAndMeetingTimeContainingAndAvailability(site, date, "Available");
     }
 
-    // Books a meeting slot - sets availability to Unavailable and state to Pending
     public void bookMeeting(int id, int itemId) {
         Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
         if (maybeMeeting.isPresent()) {
@@ -55,7 +56,6 @@ public class MeetingTimeTableService {
         }
     }
 
-    // Updates meeting state and marks as completed if state is Completed
     public void updateMeetingState(int id, String meetingState) {
         Optional<MeetingTimeTable> maybeMeeting = meetingTimeTableRepository.findById(id);
         if (maybeMeeting.isPresent()) {
@@ -63,6 +63,11 @@ public class MeetingTimeTableService {
             meeting.setMeetingState(meetingState);
             if (meetingState.equals("Completed")) {
                 meeting.setAvailability("Unavailable");
+                // Update the item availability to "Given Away"
+                if (meeting.getItemId() != null) {
+                    itemService.updateAvailability(
+                        String.valueOf(meeting.getItemId()), "Given Away");
+                }
             }
             meetingTimeTableRepository.save(meeting);
         }
