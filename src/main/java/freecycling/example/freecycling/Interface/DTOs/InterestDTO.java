@@ -1,6 +1,7 @@
-package freecycling.example.freecycling.Core;
+package freecycling.example.freecycling.Interface.DTOs;
 
 import java.sql.Timestamp;
+import freecycling.example.freecycling.Core.Interest;
 
 public class InterestDTO {
     
