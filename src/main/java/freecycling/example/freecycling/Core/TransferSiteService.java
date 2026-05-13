@@ -19,7 +19,7 @@ public class TransferSiteService {
         site.setTransferAddress(siteDto.getTransferAddress());
         
         repository.save(site);
-        return String.valueOf(site.getIdTransferSite());
+        return String.valueOf(site.getIdTransferTable());
     }
 
     public TransferSite findById(int id) {

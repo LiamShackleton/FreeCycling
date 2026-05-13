@@ -14,7 +14,7 @@ public class TransferSiteDTO {
     }
 
     public TransferSiteDTO(TransferSite transferSite) {
-        this.idTransferSite = transferSite.getIdTransferSite();
+        this.idTransferSite = transferSite.getIdTransferTable();
         this.transferSiteName = transferSite.getTransferSiteName();
         this.transferAddress = transferSite.getTransferAddress();
     }
