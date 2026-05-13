@@ -1,5 +1,7 @@
 package freecycling.example.freecycling.Core;
 
+import freecycling.example.freecycling.Interface.DTOs.MeetingTimeDTO;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +17,15 @@ public class MeetingTimeTableService {
     @Autowired
     ItemService itemService;
 
-    public void save(MeetingTimeTable meeting) {
-        meeting.setAvailability("Available");
-        meeting.setMeetingState(null);
-        meetingTimeTableRepository.save(meeting);
+    public void save(MeetingTimeDTO meeting) {
+        MeetingTimeTable meetingEntity = new MeetingTimeTable();
+        meetingEntity.setMeetingSite(meeting.getMeetingSite());
+        meetingEntity.setMeetingTime(meeting.getMeetingTime());
+        meetingEntity.setAvailability("Available");
+        meetingEntity.setMeetingState(null);
+        meetingEntity.setItemId(null);
+        
+        meetingTimeTableRepository.save(meetingEntity);
     }
 
     public MeetingTimeTable findById(int id) {

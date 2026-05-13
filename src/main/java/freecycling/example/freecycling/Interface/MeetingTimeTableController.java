@@ -2,6 +2,7 @@ package freecycling.example.freecycling.Interface;
 
 import freecycling.example.freecycling.Core.MeetingTimeTable;
 import freecycling.example.freecycling.Core.MeetingTimeTableService;
+import freecycling.example.freecycling.Interface.DTOs.MeetingTimeDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/meetings")
@@ -29,10 +31,11 @@ public class MeetingTimeTableController {
     // POST - save a new meeting time
     // Called with POST /meetings
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody MeetingTimeTable meeting) {
+    public ResponseEntity<String> save(@RequestBody MeetingTimeDTO meeting) {
         if (meeting.getMeetingSite().isBlank() || meeting.getMeetingTime().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Meeting site and time cannot be empty");
         }
+        
         service.save(meeting);
         return ResponseEntity.ok().body("Meeting time saved");
     }
@@ -40,46 +43,54 @@ public class MeetingTimeTableController {
     // GET - find a meeting by id
     // Called with GET /meetings/5
     @GetMapping("/{id}")
-    public ResponseEntity<MeetingTimeTable> getMeetingById(@PathVariable int id) {
+    public ResponseEntity<MeetingTimeDTO> getMeetingById(@PathVariable int id) {
         MeetingTimeTable result = service.findById(id);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(new MeetingTimeDTO(result));
     }
 
     // GET - get all meetings
     // Called with GET /meetings
     @GetMapping
-    public ResponseEntity<List<MeetingTimeTable>> getAllMeetings() {
+    public ResponseEntity<List<MeetingTimeDTO>> getAllMeetings() {
         List<MeetingTimeTable> results = service.findAll();
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body(results.stream()
+            .map(MeetingTimeDTO::new)
+            .collect(Collectors.toList()));
     }
 
     // GET - find meetings by site
     // Called with GET /meetings/site/Main Library
     @GetMapping("/site/{site}")
-    public ResponseEntity<List<MeetingTimeTable>> getMeetingsBySite(@PathVariable String site) {
+    public ResponseEntity<List<MeetingTimeDTO>> getMeetingsBySite(@PathVariable String site) {
         List<MeetingTimeTable> results = service.findBySite(site);
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body(results.stream()
+            .map(MeetingTimeDTO::new)
+            .collect(Collectors.toList()));
     }
 
     // GET - find meetings by date
     // Called with GET /meetings/date/2026-05-01
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<MeetingTimeTable>> getMeetingsByDate(@PathVariable String date) {
+    public ResponseEntity<List<MeetingTimeDTO>> getMeetingsByDate(@PathVariable String date) {
         List<MeetingTimeTable> results = service.findByDate(date);
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body(results.stream()
+            .map(MeetingTimeDTO::new)
+            .collect(Collectors.toList()));
     }
 
     // GET - find available meeting times by site and date
     // Called with GET /meetings/available?site=Main Library&date=2026-05-01
     @GetMapping("/available")
-    public ResponseEntity<List<MeetingTimeTable>> getAvailableTimes(
+    public ResponseEntity<List<MeetingTimeDTO>> getAvailableTimes(
             @RequestParam String site,
             @RequestParam String date) {
         List<MeetingTimeTable> results = service.findAvailableTimes(site, date);
-        return ResponseEntity.ok().body(results);
+        return ResponseEntity.ok().body(results.stream()
+            .map(MeetingTimeDTO::new)
+            .collect(Collectors.toList()));
     }
 
     // PATCH - update meeting state by id
