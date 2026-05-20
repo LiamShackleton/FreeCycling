@@ -17,10 +17,16 @@
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/DTOs/InterestDTO.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/DTOs/ItemDTO.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/DTOs/LoginDTO.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/DTOs/MeetingTimeDTO.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/DTOs/TransferSiteDTO.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/InterestController.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/ItemController.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/MeetingTimeTableController.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/TransferSiteController.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/Interface/UserController.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/security/FreecyclingUserDetails.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/security/JwtAuthFilter.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/security/JwtService.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/security/SecurityConfig.java
+/Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/security/WrongUserException.java
 /Users/reiddethorne/Documents/GitHub/FreeCycling/src/main/java/freecycling/example/freecycling/services/PasswordService.java

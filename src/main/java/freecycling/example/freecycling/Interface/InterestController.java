@@ -66,10 +66,10 @@ public class InterestController {
     // GET - find user ids interested in item by item id
     // Called with GET /interests/item/{itemId}
     @GetMapping("/item/{itemId}")
-    public ResponseEntity<List<String>> findUserIdsByItem(@PathVariable String itemId) {
+    public ResponseEntity<List<InterestDTO>> findUserIdsByItem(@PathVariable String itemId) {
         List<Interest> interests = interestService.findByItem(itemId);
         return ResponseEntity.ok().body(interests.stream()
-                .map(Interest::getUser)
+                .map(InterestDTO::new)
                 .collect(Collectors.toList()));
     }
 }
