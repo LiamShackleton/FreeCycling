@@ -19,8 +19,8 @@ public class InterestService {
     }
 
     @Transactional
-    public String save(InterestDTO interest) {
-        User user = userRepository.findById(Integer.parseInt(interest.getUser())).orElse(null);
+    public String save(InterestDTO interest, String authenticatedUserId) {
+        User user = userRepository.findById(Integer.parseInt(authenticatedUserId)).orElse(null);
         if (user == null) {
             return "Bad Id";
         }
@@ -31,7 +31,7 @@ public class InterestService {
         }
 
         Interest newInterest = new Interest();
-        newInterest.setUser(interest.getUser());
+        newInterest.setUser(authenticatedUserId);
         newInterest.setItem(interest.getItem());
         newInterest.setTimeStamp(interest.getTimeStamp());
         newInterest.setNote(interest.getNote());

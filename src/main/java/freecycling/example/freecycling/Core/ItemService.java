@@ -17,15 +17,15 @@ public class ItemService {
     }
 
     @Transactional
-    public String save(ItemDTO item) {
-        User user = userRepository.findById(Integer.parseInt(item.getItemDonor())).orElse(null);
+    public String save(ItemDTO item, String authenticatedUserId) {
+        User user = userRepository.findById(Integer.parseInt(authenticatedUserId)).orElse(null);
         if (user == null) {
             return "Bad Id";
         }
 
         Item newItem = new Item();
         newItem.setItemName(item.getItemName());
-        newItem.setItemDonor(item.getItemDonor());
+        newItem.setItemDonor(authenticatedUserId);
         newItem.setItemRecipient(item.getItemRecipient());
         newItem.setItemImageUrl(item.getItemImageUrl());
         newItem.setItemAvailability(item.getItemAvailability());

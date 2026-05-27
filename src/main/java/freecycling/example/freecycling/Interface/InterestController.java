@@ -3,8 +3,10 @@ package freecycling.example.freecycling.Interface;
 import freecycling.example.freecycling.Core.Interest;
 import freecycling.example.freecycling.Interface.DTOs.InterestDTO;
 import freecycling.example.freecycling.Core.InterestService;
+import freecycling.example.freecycling.security.FreecyclingUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +26,9 @@ public class InterestController {
     // POST - save a new interest item
     // Called with POST /interests
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody InterestDTO interest) {
-        String result = interestService.save(interest);
+    public ResponseEntity<String> save(Authentication authentication, @RequestBody InterestDTO interest) {
+        FreecyclingUserDetails details = (FreecyclingUserDetails) authentication.getPrincipal();
+        String result = interestService.save(interest, details.getUsername());
         if ("Bad Id".equals(result)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user or item ID");
         }

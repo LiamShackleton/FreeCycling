@@ -3,8 +3,10 @@ package freecycling.example.freecycling.Interface;
 import freecycling.example.freecycling.Core.Item;
 import freecycling.example.freecycling.Interface.DTOs.ItemDTO;
 import freecycling.example.freecycling.Core.ItemService;
+import freecycling.example.freecycling.security.FreecyclingUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,8 +37,9 @@ public class ItemController {
     // POST - register a new item
     // Called with POST /items
     @PostMapping
-    public ResponseEntity<String> saveItem(@RequestBody ItemDTO item) {
-        String result = itemService.save(item);
+    public ResponseEntity<String> saveItem(Authentication authentication, @RequestBody ItemDTO item) {
+        FreecyclingUserDetails details = (FreecyclingUserDetails) authentication.getPrincipal();
+        String result = itemService.save(item, details.getUsername());
         if ("Bad Id".equals(result)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid itemDonor");
         }
