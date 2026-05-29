@@ -3,10 +3,12 @@ package freecycling.example.freecycling.Interface;
 import freecycling.example.freecycling.Core.TransferSite;
 import freecycling.example.freecycling.Interface.DTOs.TransferSiteDTO;
 import freecycling.example.freecycling.Core.TransferSiteService;
+import freecycling.example.freecycling.security.FreecyclingUserDetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +28,14 @@ public class TransferSiteController {
     @Autowired
     private TransferSiteService service;
 
-    // POST - register a new transfer site
+    // POST - register a new transfer site (protected)
     // Called with POST /transfersites
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody TransferSiteDTO siteDto) {
+    public ResponseEntity<String> save(
+            Authentication authentication,
+            @RequestBody TransferSiteDTO siteDto) {
+        FreecyclingUserDetails details = (FreecyclingUserDetails) authentication.getPrincipal();
+        int userId = Integer.parseInt(details.getUsername());
         String key = service.save(siteDto);
         if (key.equals("Bad Id")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad Transfer Site Data");
@@ -37,7 +43,7 @@ public class TransferSiteController {
         return ResponseEntity.ok().body(key);
     }
 
-    // GET - find a transfer site by id
+    // GET - find a transfer site by id (public)
     // Called with GET /transfersites/5
     @GetMapping("/{id}")
     public ResponseEntity<TransferSiteDTO> getSiteById(@PathVariable int id) {
@@ -48,7 +54,7 @@ public class TransferSiteController {
         return ResponseEntity.ok().body(new TransferSiteDTO(result));
     }
 
-    // GET - get all transfer sites
+    // GET - get all transfer sites (public)
     // Called with GET /transfersites
     @GetMapping
     public ResponseEntity<List<TransferSiteDTO>> getAllSites() {
@@ -60,7 +66,7 @@ public class TransferSiteController {
         return ResponseEntity.ok().body(results);
     }
 
-    // GET - find transfer sites by name
+    // GET - find transfer sites by name (public)
     // Called with GET /transfersites/name/Main Library
     @GetMapping("/name/{name}")
     public ResponseEntity<List<TransferSiteDTO>> getSiteByName(@PathVariable String name) {
