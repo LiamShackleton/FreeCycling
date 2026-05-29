@@ -25,20 +25,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-<<<<<<< Updated upstream
             .authorizeHttpRequests(authorize -> authorize
                 // Public endpoints - no login required
                 .requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/transfersites", "/transfersites/{id}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/meetings/available").permitAll()
-                .requestMatchers(HttpMethod.GET, "/items", "/items/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/items", "/items/{id}", "/items/getAvailable").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-ui/*", "/v3/api-docs", "/v3/api-docs/*").permitAll()
                 // Everything else requires authentication
-=======
-        .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
-        		.requestMatchers(HttpMethod.GET, "/items", "/items/getAvailable").permitAll()
-                .requestMatchers(HttpMethod.GET,"/swagger-ui/*","/v3/api-docs","/v3/api-docs/*").permitAll()
->>>>>>> Stashed changes
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
