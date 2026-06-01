@@ -3,9 +3,13 @@ package freecycling.example.freecycling;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freecycling.example.freecycling.Interface.DTOs.InterestDTO;
 import freecycling.example.freecycling.Interface.DTOs.ItemDTO;
+import freecycling.example.freecycling.security.JwtService;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,6 +32,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class EndToEndItemFlowTest {
 
+    @Autowired
+    private JwtService jwtService;
+
     @LocalServerPort
     private int port;
 
@@ -36,7 +43,8 @@ class EndToEndItemFlowTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        given().baseUri("http://localhost:" + port);
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
     }
 
     /**
@@ -57,6 +65,7 @@ class EndToEndItemFlowTest {
         // Send POST request to create item
         String response = given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("1"))
                 .body(newItem)
                 .when()
                 .post("/items")
@@ -85,6 +94,7 @@ class EndToEndItemFlowTest {
         // Create the item
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("1"))
                 .body(newItem)
                 .when()
                 .post("/items")
@@ -119,6 +129,7 @@ class EndToEndItemFlowTest {
 
         String createResponse = given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("1"))
                 .body(newItem)
                 .when()
                 .post("/items")
@@ -139,6 +150,7 @@ class EndToEndItemFlowTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("2"))
                 .body(firstInterest)
                 .when()
                 .post("/interests")
@@ -154,6 +166,7 @@ class EndToEndItemFlowTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("3"))
                 .body(secondInterest)
                 .when()
                 .post("/interests")
@@ -189,6 +202,7 @@ class EndToEndItemFlowTest {
 
         String createResponse = given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("1"))
                 .body(newItem)
                 .when()
                 .post("/items")
@@ -219,6 +233,7 @@ class EndToEndItemFlowTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("2"))
                 .body(firstInterest)
                 .when()
                 .post("/interests")
@@ -234,6 +249,7 @@ class EndToEndItemFlowTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + jwtService.makeJwt("3"))
                 .body(secondInterest)
                 .when()
                 .post("/interests")
