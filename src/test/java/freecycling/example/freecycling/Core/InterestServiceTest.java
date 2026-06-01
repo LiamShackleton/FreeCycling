@@ -50,12 +50,12 @@ public class InterestServiceTest {
         testInterest.setIdInterestTable(1);
         testInterest.setUser("1");
         testInterest.setItem("1");
-        testInterest.setTimeStamp("2026-05-20 10:00:00");
+        //testInterest.setTimeStamp("2026-05-20 10:00:00");
         testInterest.setNote("I would love this bike");
 
         testInterestDTO = new InterestDTO();
         testInterestDTO.setItem("1");
-        testInterestDTO.setTimeStamp("2026-05-20 10:00:00");
+        //testInterestDTO.setTimeStamp("2026-05-20 10:00:00");
         testInterestDTO.setNote("I would love this bike");
     }
 
@@ -159,6 +159,60 @@ public class InterestServiceTest {
         List<Interest> results = interestService.findAll();
         assertNotNull(results);
         assertEquals(1, results.size());
+    }
+
+    // Test both potential recipients express interest in the item
+    @Test
+    public void testBothRecipientsExpressInterest() {
+        User user1 = new User();
+        user1.setUserId(1);
+        user1.setUserName("user1");
+        
+        User user2 = new User();
+        user2.setUserId(2);
+        user2.setUserName("user2");
+        
+        Interest interest1 = new Interest();
+        interest1.setIdInterestTable(1);
+        interest1.setUser("1");
+        interest1.setItem("1");
+        interest1.setNote("I would love this bike");
+        
+        Interest interest2 = new Interest();
+        interest2.setIdInterestTable(2);
+        interest2.setUser("2");
+        interest2.setItem("1");
+        interest2.setNote("Also interested in this item");
+        
+        when(itemRepository.findById(1)).thenReturn(Optional.of(testItem));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user1));
+        when(userRepository.findById(2)).thenReturn(Optional.of(user2));
+        when(interestRepository.findByItem("1")).thenReturn(List.of(interest1, interest2));
+        
+        // First user expresses interest
+        String result1 = interestService.save(testInterestDTO, "1");
+        assertNotNull(result1);
+        assertNotEquals("Bad Id", result1);
+        assertNotEquals("Bad Item Id", result1);
+        
+        // Second user expresses interest
+        InterestDTO interest2DTO = new InterestDTO();
+        interest2DTO.setItem("1");
+        interest2DTO.setNote("Also interested in this item");
+        String result2 = interestService.save(interest2DTO, "2");
+        assertNotNull(result2);
+        assertNotEquals("Bad Id", result2);
+        assertNotEquals("Bad Item Id", result2);
+        
+        // Both interests should be returned when querying by item
+        List<Interest> results = interestService.findByItem("1");
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        
+        // Verify both users' interests are present
+        List<String> users = results.stream().map(Interest::getUser).toList();
+        assertTrue(users.contains("1"));
+        assertTrue(users.contains("2"));
     }
 
     // Test findAvailable delegates to findAll
