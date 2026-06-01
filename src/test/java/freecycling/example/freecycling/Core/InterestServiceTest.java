@@ -3,6 +3,7 @@ package freecycling.example.freecycling.Core;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
@@ -50,12 +51,12 @@ public class InterestServiceTest {
         testInterest.setIdInterestTable(1);
         testInterest.setUser("1");
         testInterest.setItem("1");
-        testInterest.setTimeStamp("2026-05-20 10:00:00");
+        testInterest.setTimeStamp(Timestamp.valueOf("2026-05-20 10:00:00"));
         testInterest.setNote("I would love this bike");
 
         testInterestDTO = new InterestDTO();
         testInterestDTO.setItem("1");
-        testInterestDTO.setTimeStamp("2026-05-20 10:00:00");
+        testInterestDTO.setTimeStamp(Timestamp.valueOf("2026-05-20 10:00:00"));
         testInterestDTO.setNote("I would love this bike");
     }
 
