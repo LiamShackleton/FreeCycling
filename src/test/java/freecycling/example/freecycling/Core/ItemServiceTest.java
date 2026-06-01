@@ -73,6 +73,26 @@ public class ItemServiceTest {
         verify(itemRepository, never()).save(any());
     }
 
+    // Test donor posts an item to be donated
+    @Test
+    public void testDonorPostsItem() {
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        String result = itemService.save(testItemDTO, "1");
+        
+        assertNotNull(result);
+        assertNotEquals("Bad Id", result);
+        
+        verify(itemRepository).save(argThat(item ->
+            item.getItemName().equals("Old Bike") &&
+            item.getItemDonor().equals("1") &&
+            item.getItemRecipient() == null &&
+            item.getItemImageUrl().equals("http://example.com/bike.jpg") &&
+            item.getItemAvailability().equals("available") &&
+            item.getItemType().equals("Sports") &&
+            item.getItemDescription().equals("A used bike")
+        ));
+    }
+
     // Test save maps fields correctly
     @Test
     public void testSaveMapsFields() {
@@ -153,6 +173,31 @@ public class ItemServiceTest {
         items.add(testItem);
         when(itemRepository.findByItemDonor("1")).thenReturn(items);
         List<Item> results = itemService.findByUser("1");
+        assertNotNull(results);
+        assertEquals(1, results.size());
+        assertEquals("Old Bike", results.get(0).getItemName());
+    }
+
+    // Test donor posts an item that shows up in list of items being offered
+    @Test
+    public void testDonorPostsItemShowsInAvailableList() {
+        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(itemRepository.save(any(Item.class))).thenAnswer(invocation -> {
+            Item savedItem = invocation.getArgument(0);
+            savedItem.setItemId(100);
+            return savedItem;
+        });
+        
+        // Donor posts an item
+        String itemId = itemService.save(testItemDTO, "1");
+        assertNotNull(itemId);
+        assertNotEquals("Bad Id", itemId);
+        
+        // Verify the item shows up in available list
+        List<Item> items = new ArrayList<>();
+        items.add(testItem);
+        when(itemRepository.findByItemAvailability("available")).thenReturn(items);
+        List<Item> results = itemService.findAvailable();
         assertNotNull(results);
         assertEquals(1, results.size());
         assertEquals("Old Bike", results.get(0).getItemName());
